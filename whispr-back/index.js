@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import { userRouter } from "./routes/userRoutes.js";
+import { audioRouter } from "./routes/audioRoutes.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const mongoUrl = process.env.MONGO_URL;
 app.use(cors());
 app.use(express.json());
 app.use("/users", userRouter);
+app.use("/audios", audioRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello New World");

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { UserModel } from "../models/User.js";
+import mongoose from "mongoose";
+import { AudioModel } from "../models/Audio.js";
 
 const route = Router();
 
@@ -44,7 +46,30 @@ route.get("/", async (req, res) => {
   }
 });
 
-// READ ONE - Obtener un usuario por ID
+// GET - Obtener todos los audios de un usuario
+route.get("/audios/:creatorId", async (req, res) => {
+  try {
+    const { creatorId } = req.params;
+
+    // Validar que el creatorId sea válido de MongoDB
+    if (!mongoose.Types.ObjectId.isValid(creatorId)) {
+      return res.status(400).json({ error: "ID de usuario inválido" });
+    }
+
+    // Buscar todos los audios del usuario
+    const audios = await AudioModel.find({ creatorId: creatorId });
+
+    res.status(200).json({
+      count: audios.length,
+      data: audios,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// GET - Obtener un usuario por ID
 route.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
