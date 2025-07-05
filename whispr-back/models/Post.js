@@ -28,18 +28,4 @@ const PostSchema = new mongoose.Schema(
   }
 );
 
-// // Método para incrementar likes
-// PostSchema.methods.incrementLike = function () {
-//   this.likeCount += 1;
-//   return this.save();
-// };
-
-// // Método para decrementar likes
-// PostSchema.methods.decrementLike = function () {
-//   if (this.likeCount > 0) {
-//     this.likeCount -= 1;
-//   }
-//   return this.save();
-// };
-
 export const PostModel = mongoose.model("posts", PostSchema);

@@ -64,7 +64,6 @@ route.post("/create", upload.single("audio"), async (req, res) => {
               console.error("Error Cloudinary:", error);
               reject(error);
             } else {
-              console.log("Upload exitoso:", result.secure_url);
               resolve(result);
             }
           }
@@ -228,7 +227,6 @@ route.put("/:id", upload.single("audio"), async (req, res) => {
                 console.error("Error Cloudinary:", error);
                 reject(error);
               } else {
-                console.log("Upload exitoso:", result.secure_url);
                 resolve(result);
               }
             }
