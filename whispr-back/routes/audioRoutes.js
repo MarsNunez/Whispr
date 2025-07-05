@@ -20,6 +20,30 @@ const upload = multer({
   },
 });
 
+// GET - Get an audio by its ID
+route.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validar que el ID sea válido de MongoDB
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "ID de audio inválido" });
+    }
+
+    // Buscar el audio por ID
+    const audio = await AudioModel.findById(id);
+
+    if (!audio) {
+      return res.status(404).json({ error: "Audio no encontrado" });
+    }
+
+    res.status(200).json(audio);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 route.post("/create", upload.single("audio"), async (req, res) => {
   try {
     if (!req.file) {
@@ -86,7 +110,7 @@ route.post("/create", upload.single("audio"), async (req, res) => {
   }
 });
 
-// DELTE - Ruta para eliminar audio por MongoDB ID
+// DELETE - Ruta para eliminar audio por MongoDB ID
 route.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const UserScheme = mongoose.Schema(
+const UserSchema = mongoose.Schema(
   {
     // @strange_90
     userName: {
@@ -37,4 +37,4 @@ const UserScheme = mongoose.Schema(
   }
 );
 
-export const UserModel = mongoose.model("users", UserScheme);
+export const UserModel = mongoose.model("users", UserSchema);

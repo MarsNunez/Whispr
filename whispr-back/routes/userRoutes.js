@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UserModel } from "../models/User.js";
 import mongoose from "mongoose";
 import { AudioModel } from "../models/Audio.js";
+import { PostModel } from "../models/Post.js";
 
 const route = Router();
 
@@ -47,7 +48,7 @@ route.get("/", async (req, res) => {
 });
 
 // GET - Obtener todos los audios de un usuario
-route.get("/audios/:creatorId", async (req, res) => {
+route.get("/audios/all/:creatorId", async (req, res) => {
   try {
     const { creatorId } = req.params;
 
@@ -66,6 +67,37 @@ route.get("/audios/:creatorId", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
+  }
+});
+
+// ** GET - Obtener todos los posts de un usuario por ID
+route.get("/posts/all/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const posts = await PostModel.find({ authorID: userId })
+      .sort({ createdAt: -1 }) // Más recientes primero
+      .skip(skip)
+      .limit(limit);
+
+    const totalPosts = await PostModel.countDocuments({ authorID: userId });
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    res.json({
+      posts,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalPosts,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 

@@ -23,7 +23,7 @@ const AudioSchema = mongoose.Schema(
     tags: [String],
     visibility: {
       type: String,
-      enum: ["public", "premium", "private"],
+      enum: ["public", "premium", "hidden"],
       default: "public",
     },
     price: {
@@ -38,6 +38,7 @@ const AudioSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    // default: "https://cdn-icons-png.flaticon.com/512/12165/12165108.png",
   },
   {
     timestamps: true,
