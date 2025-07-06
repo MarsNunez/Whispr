@@ -27,7 +27,25 @@ const UserSchema = mongoose.Schema(
       default:
         "https://media.istockphoto.com/id/1426692001/vector/cute-funny-halloween-ghost-scary-design-illustration-childish-spooky-boo-character-for-kids.jpg?s=612x612&w=0&k=20&c=y08yBlCL0efHrKQrXqA78ql0_LAcb5_0y92IHLxpYKU=",
     },
-    followers: [String],
+    // Usuarios que siguen a este usuario
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+      },
+    ],
+    // Usuarios que este usuario sigue
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+      },
+    ],
+    // Contadores para optimizar consultas
+    followersCount: {
+      type: Number,
+      default: 0,
+    },
     interestTags: {
       type: [String],
     },
