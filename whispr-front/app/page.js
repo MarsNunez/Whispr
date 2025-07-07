@@ -80,12 +80,12 @@ export default function Home() {
       </section>
       <div className="border mx-18 border-gray-400 mt-5" />
       {/* SERVICES */}
-      <section className="max-w-6xl mx-auto mt-40">
+      <section className="max-w-6xl mx-auto mt-40 px-10">
         <p className="uppercase text-sm tracking-widest text-[#ce793d] mb-4">
           Our Services
         </p>
         <div className="grid grid-cols-8">
-          <h2 className="text-5xl font-semibold col-span-5">
+          <h2 className="text-5xl font-semibold col-span-5 leading-14">
             Bring Your Stories to Life with Our All-in-One Platform for Creators
             and Listeners
           </h2>
@@ -144,7 +144,7 @@ export default function Home() {
                 ullamcorper.
               </p>
               <div className="flex items-center justify-center text-5xl mt-4">
-                <i class="fa-solid fa-piggy-bank"></i>
+                <i className="fa-solid fa-piggy-bank"></i>
               </div>
             </div>
           </div>
@@ -188,7 +188,7 @@ export default function Home() {
             </div>
             <div className="px-8">
               <h3 className="text-3xl font-semibold mb-3 mt-4">
-                Comunity & Reviews
+                A great Comunity
               </h3>
               <p className="text-gray-700">
                 Tortor nisl elit pulvinar pellentesque libero varius libero
@@ -196,6 +196,70 @@ export default function Home() {
               </p>
               <div className="flex items-center justify-center text-5xl mt-4">
                 <i className="fa-solid fa-people-group"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* WHY CHOOSE US */}
+      <section className="max-w-6xl mx-auto mt-40">
+        <div className="grid grid-cols-10 gap-14">
+          <figure className="col-span-4 rounded-3xl overflow-hidden">
+            <img
+              src="/img/trust-creators.webp"
+              alt="trust-creators-img"
+              className="h-full object-cover"
+            />
+          </figure>
+          <div className="col-span-6 py-3">
+            <p className="uppercase text-sm tracking-widest text-[#ce793d] mb-4">
+              Why choose us
+            </p>
+            <h3 className="text-5xl font-semibold leading-14">
+              Why Creators Trust Whispr for Their Journey
+            </h3>
+            <div className="mt-8 flex flex-col gap-7">
+              <div className="flex gap-6">
+                <div className="bg-indigo-200 h-fit p-3 rounded-full">
+                  <i className="fa-solid fa-circle-check text-indigo-700 text-3xl"></i>
+                </div>
+                <div className="pr-10 mt-2">
+                  <h4 className="font-bold text-2xl mb-2 text-indigo-600">
+                    Proven Results
+                  </h4>
+                  <p>
+                    We’ve helped dozens of creators launch successful podcasts,
+                    grow their audience, and build loyal communities.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="bg-indigo-200 h-fit p-3 rounded-full">
+                  <i className="fa-solid fa-circle-check text-indigo-700 text-3xl"></i>
+                </div>
+                <div className="pr-10 mt-2">
+                  <h4 className="font-bold text-2xl mb-2 text-indigo-600">
+                    Expertise and Experience
+                  </h4>
+                  <p>
+                    We’ve helped dozens of creators launch successful podcasts,
+                    grow their audience, and build loyal communities.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="bg-indigo-200 h-fit p-3 rounded-full">
+                  <i className="fa-solid fa-circle-check text-indigo-700 text-3xl"></i>
+                </div>
+                <div className="pr-10 mt-2">
+                  <h4 className="font-bold text-2xl mb-2 text-indigo-600">
+                    Data-Driven Growth
+                  </h4>
+                  <p>
+                    We’ve helped dozens of creators launch successful podcasts,
+                    grow their audience, and build loyal communities.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
