@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="pb-30">
+    <main>
       {/* HERO */}
       <section className="text-center px-10 py-30">
         <p className="uppercase text-sm tracking-widest text-[#ce793d]">
@@ -265,6 +265,50 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* CALL TO ACTION */}
+      <section className="max-w-6xl mx-auto mt-40 mb-10">
+        <p className="uppercase text-sm tracking-widest text-[#ce793d] mb-4 text-center">
+          Speak or Listen
+        </p>
+        <h3 className="text-5xl font-semibold leading-14 max-w-2xl text-center mx-auto">
+          Start Speaking or Listening with{" "}
+          <span className="text-indigo-700 underline underline-offset-4">
+            Wispr
+          </span>{" "}
+          Today
+        </h3>
+        <figure className="w-full rounded-4xl overflow-hidden h-full max-h-[28rem] object-contain max-w-5xl mx-auto mt-16">
+          <img src="/img/calltoactionimg.webp" alt="call-to-action-img" />
+        </figure>
+        <div className="flex justify-center mt-12 mb-15">
+          <button className="bg-indigo-600 hover:bg-indigo-800 duration-150 text-white rounded-2xl px-8 py-4 text-lg font-medium">
+            Join to the Community <span className="font-bold">→</span>
+          </button>
+        </div>
+      </section>
+      {/* FOOTER */}
+      <footer className="border-t max-w-6xl mx-auto py-4 flex justify-between">
+        <div className="flex gap-5">
+          <p>Copyright © 2025 Whispr</p>
+          <p>|</p>
+          <p>
+            Built by{" "}
+            <a
+              rel="stylesheet"
+              href="https://github.com/MarsNunez"
+              about="_blank"
+              className="text-indigo-700 font-medium"
+            >
+              MarsNunez
+            </a>
+          </p>
+        </div>
+        <div className="flex gap-5">
+          <p>Terms of Use</p>
+          <p>|</p>
+          <p>Privacy Policy</p>
+        </div>
+      </footer>
     </main>
   );
 }
