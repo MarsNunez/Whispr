@@ -6,28 +6,52 @@ import { PostModel } from "../models/Post.js";
 
 const route = Router();
 
+// route.post("/create", async (req, res) => {
+//   try {
+//     const {
+//       userName,
+//       email,
+//       password,
+//       displayName,
+//       bio,
+//       profilePicture,
+//       followers,
+//       interestTags,
+//     } = req.body;
+
+//     const newUser = await UserModel.create({
+//       userName,
+//       email,
+//       password,
+//       displayName,
+//       bio,
+//       profilePicture,
+//       followers,
+//       interestTags,
+//     });
+
+//     res.status(201).json(newUser);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ error: error.message });
+//   }
+// });
+
 route.post("/create", async (req, res) => {
   try {
-    const {
-      userName,
-      email,
-      password,
-      displayName,
-      bio,
-      profilePicture,
-      followers,
-      interestTags,
-    } = req.body;
+    const { displayName, email, password } = req.body;
+
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        error: "Email is already registered",
+      });
+    }
 
     const newUser = await UserModel.create({
-      userName,
+      displayName,
       email,
       password,
-      displayName,
-      bio,
-      profilePicture,
-      followers,
-      interestTags,
     });
 
     res.status(201).json(newUser);

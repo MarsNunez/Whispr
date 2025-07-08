@@ -2,11 +2,10 @@ import mongoose from "mongoose";
 
 const UserSchema = mongoose.Schema(
   {
-    // @strange_90
+    // Ejemplo de userName: @user3023902
     userName: {
       type: String,
       unique: true,
-      required: true,
     },
     email: {
       type: String,
@@ -54,5 +53,39 @@ const UserSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Middleware que se ejecuta antes de guardar
+UserSchema.pre("save", async function (next) {
+  // Solo generar userName si no existe (para nuevos usuarios)
+  if (!this.userName) {
+    try {
+      // Limpiar el displayName para crear la base del userName
+      let baseUserName = this.displayName
+        .toLowerCase()
+        .replace(/\s+/g, "") // Quitar espacios
+        .replace(/[^a-z0-9]/g, "") // Solo letras y números
+        .substring(0, 15); // Limitar longitud
+
+      // Si después de limpiar queda vacío, usar 'user' como base
+      if (!baseUserName) {
+        baseUserName = "user";
+      }
+
+      let userName = `@${baseUserName}`;
+      let counter = 1;
+
+      // Verificar si ya existe y agregar números si es necesario
+      while (await this.constructor.findOne({ userName })) {
+        userName = `@${baseUserName}${counter}`;
+        counter++;
+      }
+
+      this.userName = userName;
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
 
 export const UserModel = mongoose.model("users", UserSchema);

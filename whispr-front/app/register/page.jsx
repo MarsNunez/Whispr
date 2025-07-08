@@ -29,18 +29,25 @@ const RegisterView = () => {
           <span className="text-indigo-700">Create</span> an account
         </h2>
         <form className="flex flex-col p-5 max-w-lg mx-auto">
-          <label htmlFor="username" className="text-sm">
-            User name
+          <label htmlFor="displayedName" className="text-sm">
+            Displayed name
           </label>
           <input
             type="text"
-            id="username"
+            id="displayedName"
+            placeholder="JohnDoe"
             className="border-2 border-indigo-700 px-3 py-2 text-lg rounded-xl mt-2 shadow-lg bg-gray-50"
           />
-          <label htmlFor="email" className="text-sm mt-5">
-            Email
-          </label>
+          <div className="mt-5 flex justify-between">
+            <label htmlFor="email" className="text-sm">
+              Email
+            </label>
+            <div className="text-sm bg-red-500 text-white px-2 rounded-lg">
+              Email is already registered
+            </div>
+          </div>
           <input
+            placeholder="hallo@email.com"
             type="email"
             id="email"
             className="border-2 border-indigo-700 px-3 py-2 text-lg rounded-xl mt-2 shadow-lg bg-gray-50"
@@ -49,6 +56,7 @@ const RegisterView = () => {
             Password
           </label>
           <input
+            placeholder="******"
             type="password"
             id="password"
             className="border-2 border-indigo-700 px-3 py-2 text-lg rounded-xl mt-2 shadow-lg bg-gray-50"
@@ -57,6 +65,7 @@ const RegisterView = () => {
             Confirm password
           </label>
           <input
+            placeholder="******"
             type="password"
             id="confirmPassword"
             className="border-2 border-indigo-700 px-3 py-2 text-lg rounded-xl mt-2 shadow-lg bg-gray-50"
