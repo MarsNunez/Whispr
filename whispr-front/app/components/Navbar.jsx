@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Navbar = () => {
   return (
     <nav className="flex items-center justify-between text-sm px-8 pt-2 pb-1">
@@ -11,7 +13,7 @@ const Navbar = () => {
       </div>
       <ul className="flex gap-x-7 font-semibold">
         <li>Log in</li>
-        <li>Sign up</li>
+        <Link href={"/register"}>Register</Link>
       </ul>
     </nav>
   );
