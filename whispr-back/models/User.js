@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const UserSchema = mongoose.Schema(
   {
-    // Ejemplo de userName: @user3023902
     userName: {
       type: String,
       unique: true,
@@ -53,20 +53,23 @@ const UserSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-
-// Middleware que se ejecuta antes de guardar
+// Hash password before saving
 UserSchema.pre("save", async function (next) {
-  // Solo generar userName si no existe (para nuevos usuarios)
-  if (!this.userName) {
-    try {
-      // Limpiar el displayName para crear la base del userName
+  try {
+    // Only hash password if it has been modified (or is new)
+    if (this.isModified("password")) {
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+    }
+
+    // Generate username if not exists
+    if (!this.userName) {
       let baseUserName = this.displayName
         .toLowerCase()
-        .replace(/\s+/g, "") // Quitar espacios
-        .replace(/[^a-z0-9]/g, "") // Solo letras y números
-        .substring(0, 15); // Limitar longitud
+        .replace(/\s+/g, "")
+        .replace(/[^a-z0-9]/g, "")
+        .substring(0, 15);
 
-      // Si después de limpiar queda vacío, usar 'user' como base
       if (!baseUserName) {
         baseUserName = "user";
       }
@@ -74,18 +77,16 @@ UserSchema.pre("save", async function (next) {
       let userName = `@${baseUserName}`;
       let counter = 1;
 
-      // Verificar si ya existe y agregar números si es necesario
       while (await this.constructor.findOne({ userName })) {
         userName = `@${baseUserName}${counter}`;
         counter++;
       }
-
       this.userName = userName;
-    } catch (error) {
-      return next(error);
     }
+    next();
+  } catch (error) {
+    next(error);
   }
-  next();
 });
 
 export const UserModel = mongoose.model("users", UserSchema);

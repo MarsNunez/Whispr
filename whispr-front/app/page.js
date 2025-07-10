@@ -1,4 +1,9 @@
+"use client";
+
+import { useAuth } from "./context/AuthContext";
+
 export default function Home() {
+  const { isAuthenticated } = useAuth();
   return (
     <main>
       {/* HERO */}
@@ -6,6 +11,7 @@ export default function Home() {
         <p className="uppercase text-sm tracking-widest text-[#ce793d]">
           Premium Audio Sharring Website
         </p>
+        {isAuthenticated && "Yeeeees"}
         <h2 className="text-6xl font-semibold mt-4 mb-10">
           Amplify Your Audio with Whispr – Where Audio & Innovation Merge
         </h2>

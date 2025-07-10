@@ -5,6 +5,7 @@ import cors from "cors";
 import { userRouter } from "./routes/userRoutes.js";
 import { audioRouter } from "./routes/audioRoutes.js";
 import { postRouter } from "./routes/postRoutes.js";
+import { loginRoute } from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use("/users", userRouter);
 app.use("/audios", audioRouter);
 app.use("/posts", postRouter);
+
+app.post("/auth/login", loginRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello New World");
