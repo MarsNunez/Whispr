@@ -73,9 +73,11 @@ const LoginView = () => {
             <label htmlFor="email" className="text-sm">
               Email
             </label>
-            <div className="text-sm bg-red-500 text-white px-2 rounded-lg">
-              Email or password don't match
-            </div>
+            {error && (
+              <div className="text-sm bg-red-500 text-white px-2 rounded-lg">
+                {error}
+              </div>
+            )}
           </div>
           <input
             placeholder="hallo@email.com"
