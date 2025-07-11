@@ -125,17 +125,28 @@ route.get("/posts/all/:userId", async (req, res) => {
   }
 });
 
-// GET - Obtener un usuario por ID
-route.get("/:id", async (req, res) => {
+// GET - Obtener un usuario por ID - (SIMPLE / SEGURO)
+route.get("/:userName", async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await UserModel.findById(id);
+    const { userName } = req.params;
+    const user = await UserModel.findOne({ userName });
 
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    res.status(200).json(user);
+    res.status(200).json({
+      id: user._id,
+      userName: user.userName,
+      displayName: user.displayName,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      following: user.following,
+      followersCount: user.followersCount,
+      bio: user.bio,
+      interestTags: user.interestTags,
+      createdAt: user.createdAt,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

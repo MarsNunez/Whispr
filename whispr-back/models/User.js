@@ -20,7 +20,10 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    bio: String,
+    bio: {
+      type: String,
+      default: "Some interesting bio :)",
+    },
     profilePicture: {
       type: String,
       default:
