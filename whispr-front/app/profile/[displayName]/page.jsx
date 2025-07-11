@@ -28,7 +28,7 @@ const ProfileView = () => {
   // console.log(user);
 
   return (
-    <section className="pb-10 mt-10">
+    <section className="pb-20 mt-10">
       {userData && (
         <>
           <div className="flex w-fit mx-auto gap-28">
@@ -71,17 +71,7 @@ const ProfileView = () => {
             <h3 className="text-gray-600/80 text-2xl tracking-wider font-semibold mb-7">
               Latest Audios
             </h3>
-            <div className="flex gap-10 flex-wrap">
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
+            <div className="grid grid-cols-6">
               <div className="max-w-40">
                 <img
                   src={userData.profilePicture}
