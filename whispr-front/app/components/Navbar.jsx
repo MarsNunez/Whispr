@@ -18,7 +18,7 @@ const Navbar = () => {
           <h1 className="text-2xl font-semibold pb-1">Whispr .</h1>
         </Link>
         <ul className="flex gap-x-7">
-          <li className="pb-1">What's New</li>
+          <li className="pb-1">Home</li>
           <li className="pb-1">Categories</li>
           <li className="pb-1">Creators</li>
         </ul>
@@ -26,6 +26,13 @@ const Navbar = () => {
       <ul className="flex gap-x-7 font-semibold">
         {isAuthenticated ? (
           <div className="flex items-center gap-7">
+            <Link
+              href={`/${user.userName}/audios`}
+              className="font-normal bg-indigo-600 text-white h-fit px-3 py-1 rounded-lg"
+            >
+              My Audios
+            </Link>
+            <div className="mx-1 font-normal">|</div>
             <button
               onClick={handleLogout}
               className="bg-gray-800 text-white h-fit px-3 py-1 rounded-lg cursor-pointer"
