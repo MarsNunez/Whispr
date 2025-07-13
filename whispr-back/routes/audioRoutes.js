@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { AudioModel } from "../models/Audio.js";
+import { UserModel } from "../models/User.js";
 import multer from "multer";
 import cloudinary from "../config/cloudinary.js";
 import mongoose from "mongoose";
@@ -82,13 +83,14 @@ route.post("/create", upload.single("audio"), async (req, res) => {
 
     const audioData = {
       creatorId: req.body.creatorId,
+      userName: req.body.userName,
       title: req.body.title || req.file.originalname,
       description: req.body.description || "",
       audioUrl: result.secure_url,
       duration: result.duration || 0,
       tags: tags, // Array procesado
       visibility: req.body.visibility || "public",
-      price: req.body.price || 0,
+      price: req.body.price,
     };
 
     const newAudio = await AudioModel.create(audioData);
@@ -273,6 +275,43 @@ route.put("/:id", upload.single("audio"), async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
+  }
+});
+
+// GET - Obtener todos los audios por userName
+route.get("/audiosByUserName/:userName", async (req, res) => {
+  try {
+    const { userName } = req.params;
+
+    // Validar que se proporcionó un userName
+    if (!userName) {
+      return res.status(400).json({ error: "El userName es requerido" });
+    }
+
+    // Buscar todos los audios que coincidan con el userName
+    const audios = await AudioModel.find({ userName });
+    const userData = await UserModel.findOne({ userName });
+
+    // Verificar si se encontraron audios
+    if (!audios || audios.length === 0) {
+      return res.status(200).json({ message: "0 audios." });
+    }
+
+    res.status(200).json({
+      user: {
+        id: userData._id,
+        userName: userData.userName,
+        displayName: userData.displayName,
+        email: userData.email,
+        profilePicture: userData.profilePicture,
+      },
+      audios,
+    });
+  } catch (error) {
+    console.error("Error al obtener audios por userName:", error);
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor", details: error.message });
   }
 });
 

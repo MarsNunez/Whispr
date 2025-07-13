@@ -7,6 +7,11 @@ const AudioSchema = mongoose.Schema(
       ref: "users",
       required: true,
     },
+    userName: {
+      type: String,
+      ref: "users", // Sigue refiriendo al modelo "users" para mantener la relación
+      required: true,
+    },
     title: {
       type: String,
       required: true,
