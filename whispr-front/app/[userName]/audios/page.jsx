@@ -23,9 +23,9 @@ const UserAudiosView = () => {
     getData();
   }, [params.userName]);
   return (
-    <section className="border py-15">
-      {data && (
-        <>
+    <section className="py-15">
+      {data.user && (
+        <div className="">
           <img
             src={data.user.profilePicture}
             alt="Profile picture"
@@ -47,8 +47,63 @@ const UserAudiosView = () => {
           <h1 className="text-center jost font-medium text-3xl">
             My Audios Studio
           </h1>
-        </>
+        </div>
       )}
+
+      <section className="max-w-6xl mx-auto mt-16">
+        <table className="w-full">
+          <thead className="pb-5">
+            <tr className="">
+              <th>Thumbnail</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Likes</th>
+              <th>Tags</th>
+              <th>Visibility</th>
+              <th>Price</th>
+              <th>Plays</th>
+            </tr>
+          </thead>
+          {data.audios && (
+            <tbody className="mx-10">
+              {data.audios.map((audio, index) => (
+                <tr
+                  className={`text-center ${
+                    index === data.audios.length - 1
+                      ? ""
+                      : "border-b border-gray-300"
+                  }`}
+                  key={audio._id}
+                >
+                  <td className="flex items-center justify-center">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
+                      alt="audio image
+            "
+                      className="w-20 py-5"
+                    />
+                  </td>
+                  <td>{audio.title}</td>
+                  <td>{`${
+                    audio.description
+                      ? `${audio.description}`
+                      : "No description"
+                  }`}</td>
+                  <td>{audio.likeCount}</td>
+                  <td>
+                    {audio.tags.map((tag, index) => (
+                      <p key={index}>{tag}</p>
+                    ))}
+                  </td>
+                  <td>{audio.visibility}</td>
+                  <td>{audio.price}</td>
+                  <td>{audio.playCount}</td>
+                </tr>
+              ))}
+            </tbody>
+          )}
+        </table>
+      </section>
     </section>
   );
 };
