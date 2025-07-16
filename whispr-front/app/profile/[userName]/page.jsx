@@ -29,6 +29,7 @@ const ProfileView = () => {
 
   return (
     <section className="pb-20 mt-10">
+      <p className="text-center">Profile / Audios / Posts</p>
       {userData && (
         <>
           <div className="grid grid-cols-2 gap-8 max-w-6xl mx-auto ">
