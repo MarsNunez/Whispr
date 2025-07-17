@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const UserAudiosView = () => {
+const UserAudioStudioView = () => {
   const params = useParams();
   const [data, setData] = useState({});
 
@@ -78,17 +78,20 @@ const UserAudiosView = () => {
                   <td className="flex items-center justify-center">
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
-                      alt="audio image
-            "
+                      alt="audio image"
                       className="w-20 py-5"
                     />
                   </td>
-                  <td>{audio.title}</td>
-                  <td>{`${
-                    audio.description
-                      ? `${audio.description}`
-                      : "No description"
-                  }`}</td>
+                  <td className="max-w-[7rem]">
+                    {/* Max lenght for title: 90 */}
+                    <div className="line-clamp-2">{audio.title}</div>
+                  </td>
+                  <td className="max-w-[10rem] px-5">
+                    {/* Max lenght for desc: 130 */}
+                    <div className="line-clamp-2">
+                      {audio.description ? audio.description : "No description"}
+                    </div>
+                  </td>
                   <td>{audio.likeCount}</td>
                   <td>
                     {audio.tags.map((tag, index) => (
@@ -108,4 +111,4 @@ const UserAudiosView = () => {
   );
 };
 
-export default UserAudiosView;
+export default UserAudioStudioView;
