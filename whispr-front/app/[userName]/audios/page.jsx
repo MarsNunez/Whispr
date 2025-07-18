@@ -386,12 +386,12 @@ const UserAudioStudioView = () => {
                   <td>{audio.playCount}</td>
                   <td>
                     <button className="bg-green-600 text-white py-1 px-2 rounded-lg">
-                      <i class="fa-solid fa-pen-to-square"></i>
+                      <i className="fa-solid fa-pen-to-square"></i>
                     </button>
                   </td>
                   <td>
                     <button className="bg-red-600 text-white py-1 px-2 rounded-lg">
-                      <i class="fa-solid fa-trash"></i>
+                      <i className="fa-solid fa-trash"></i>
                     </button>
                   </td>
                 </tr>

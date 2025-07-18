@@ -1,5 +1,8 @@
 "use client";
 
+import AudiosComponent from "@/app/components/profile/AudiosComponent";
+import PostComponent from "@/app/components/profile/PostsComponent";
+import ProfileComponent from "@/app/components/profile/ProfileComponent";
 import { useAuth } from "@/app/context/AuthContext";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -8,6 +11,7 @@ import { useEffect, useState } from "react";
 const ProfileView = () => {
   const params = useParams();
   const [userData, setUserData] = useState({});
+  const [showOption, setShowOption] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -25,124 +29,32 @@ const ProfileView = () => {
   }, [params.userName]);
 
   const { user } = useAuth();
-  // console.log(user);
 
   return (
     <section className="pb-20 mt-10">
-      <p className="text-center">Profile / Audios / Posts</p>
-      {userData && (
-        <>
-          <div className="grid grid-cols-2 gap-8 max-w-6xl mx-auto ">
-            <div className="max-w-xl w-full">
-              <p className="text-gray-700/85">{userData.userName}</p>
-              <h2 className="text-5xl font-semibold mb-6">
-                {userData.displayName}
-              </h2>
-              <p className="jost text-lg w-full">
-                {!userData.bio
-                  ? "It's a show about the life of the digital nomads all over the world and what they struggle with or what happens to them when they travel."
-                  : userData.bio}
-              </p>
-              <p className="text-lg uppercase font-medium jost tracking-widest text-gray-800/45 mt-6">
-                Interest Tags:
-              </p>
-              {userData.interestTags && (
-                <div className="flex jost flex-wrap mt-2 gap-4">
-                  {userData.interestTags.map((tag) => (
-                    <div
-                      key={tag}
-                      className="border text-lg px-4 py-1 rounded-lg"
-                    >
-                      {tag}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <figure className="justify-self-end">
-              <img
-                src={userData.profilePicture}
-                alt="profile picture"
-                className="w-full max-w-[27rem] rounded-3xl shadowing"
-              />
-            </figure>
-          </div>
-          {/* LATEST AUDIOS */}
-          <div className="max-w-6xl mx-auto mt-14">
-            <h3 className="text-gray-600/80 text-2xl tracking-wider font-semibold mb-7">
-              Latest Audios
-            </h3>
-            <div className="grid grid-cols-6">
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
-              <div className="max-w-40">
-                <img
-                  src={userData.profilePicture}
-                  alt="latestAuth"
-                  className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
-                />
-                <h5 className="text-gray-600/80 font-medium">
-                  {"Episode 07: Goodbye boring, hello adventure "}
-                </h5>
-              </div>
-            </div>
-          </div>
-          <div className="max-w-6xl mx-auto mt-14">
-            <h3 className="text-gray-600/80 text-2xl tracking-wider font-semibold mb-7">
-              Feed
-            </h3>
-          </div>
-        </>
-      )}
+      <div className="w-fit mx-auto mb-10">
+        <button
+          className="text-white bg-indigo-600 font-medium rounded-l-md px-4 py-1 cursor-pointer"
+          onClick={() => setShowOption(0)}
+        >
+          Profile
+        </button>
+        <button
+          className="text-white bg-indigo-600 font-medium border-r border-l px-4 py-1 cursor-pointer"
+          onClick={() => setShowOption(1)}
+        >
+          Audios
+        </button>
+        <button
+          className="text-white bg-indigo-600 font-medium rounded-r-md px-4 py-1 cursor-pointer"
+          onClick={() => setShowOption(2)}
+        >
+          Posts
+        </button>
+      </div>
+      {userData && showOption === 0 && <ProfileComponent userData={userData} />}
+      {userData && showOption === 1 && <AudiosComponent userData={userData} />}
+      {userData && showOption === 2 && <PostComponent userData={userData} />}
     </section>
   );
 };
