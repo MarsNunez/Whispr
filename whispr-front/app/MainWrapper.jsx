@@ -1,8 +1,11 @@
+// app/layout.jsx (o donde esté MainWrapper)
 "use client";
 import { usePathname } from "next/navigation";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastContainer } from "react-toastify"; // Importa ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Importa los estilos de react-toastify
 
 const MainWrapper = ({ children }) => {
   const pathname = usePathname();
@@ -18,6 +21,18 @@ const MainWrapper = ({ children }) => {
           {children}
           {!shouldHideNavbar && <Footer />}
         </main>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </div>
     </AuthProvider>
   );

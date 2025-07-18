@@ -189,7 +189,7 @@ route.delete("/:id", async (req, res) => {
 });
 
 // UPDATE - Actualizar un audio por ID (con o sin archivo)
-route.put("/:id", upload.single("audio"), async (req, res) => {
+route.patch("/:id", upload.single("audio"), async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -201,13 +201,14 @@ route.put("/:id", upload.single("audio"), async (req, res) => {
     }
 
     // Si se subió un nuevo archivo de audio
+    let audioUrl = existingAudio.audioUrl;
+    let duration = existingAudio.duration;
     if (req.file) {
       // Extraer el public_id del audio anterior para eliminarlo
       let oldPublicId = null;
       if (existingAudio.audioUrl) {
         const urlParts = existingAudio.audioUrl.split("/");
         const uploadIndex = urlParts.indexOf("upload");
-
         if (uploadIndex !== -1 && uploadIndex + 2 < urlParts.length) {
           const pathParts = urlParts.slice(uploadIndex + 2);
           const fullPath = pathParts.join("/");
@@ -239,42 +240,69 @@ route.put("/:id", upload.single("audio"), async (req, res) => {
       // Eliminar el audio anterior de Cloudinary
       if (oldPublicId) {
         try {
-          const deleteResult = await cloudinary.uploader.destroy(oldPublicId, {
+          await cloudinary.uploader.destroy(oldPublicId, {
             resource_type: "video",
           });
           console.log(`Audio anterior eliminado de Cloudinary: ${oldPublicId}`);
         } catch (cloudinaryError) {
           console.error("Error al eliminar audio anterior:", cloudinaryError);
+          // No fallar la solicitud si la eliminación falla
         }
       }
 
-      // Actualizar con los nuevos datos del audio
-      updateData.audioUrl = result.secure_url;
-      updateData.duration = result.duration || 0;
+      audioUrl = result.secure_url;
+      duration = result.duration || 0;
     }
 
     // Procesar tags si vienen en el body
+    let tags = existingAudio.tags;
     if (updateData.tags) {
-      if (Array.isArray(updateData.tags)) {
-        updateData.tags = updateData.tags; // Ya es array
-      } else {
-        updateData.tags = updateData.tags.split(",").map((tag) => tag.trim()); // String separado por comas
-      }
+      tags = Array.isArray(updateData.tags)
+        ? updateData.tags
+        : updateData.tags.split(",").map((tag) => tag.trim());
     }
 
-    const updatedAudio = await AudioModel.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    // Construir objeto con datos actualizados, manteniendo valores existentes si no se envían
+    const updatedAudioData = {
+      title: updateData.title || existingAudio.title,
+      description: updateData.description || existingAudio.description,
+      audioUrl,
+      duration,
+      tags,
+      visibility: updateData.visibility || existingAudio.visibility,
+      price: updateData.price
+        ? parseFloat(updateData.price)
+        : existingAudio.price,
+      likeCount: existingAudio.likeCount,
+      playCount: existingAudio.playCount,
+      creatorId: existingAudio.creatorId,
+      userName: existingAudio.userName,
+    };
+
+    // Actualizar el audio en la base de datos
+    const updatedAudio = await AudioModel.findByIdAndUpdate(
+      id,
+      updatedAudioData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!updatedAudio) {
-      return res.status(404).json({ error: "Audio no encontrado" });
+      return res.status(404).json({ error: "No se pudo actualizar el audio" });
     }
 
-    res.status(200).json(updatedAudio);
+    // Estandarizar la respuesta para el frontend
+    res.status(200).json({
+      message: "Audio actualizado exitosamente",
+      audio: updatedAudio,
+    });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: error.message });
+    console.error("Error al actualizar audio:", error);
+    res
+      .status(400)
+      .json({ error: error.message || "Error al procesar la solicitud" });
   }
 });
 

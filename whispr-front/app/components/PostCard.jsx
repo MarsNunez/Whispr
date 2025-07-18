@@ -25,13 +25,13 @@ const PostCard = () => {
           </div>
           <div className="flex justify-between max-w-sm mt-2 text-gray-500 text-sm">
             <button className="flex items-center gap-1 hover:text-blue-500 hover:bg-gray-100 px-2 py-1 rounded">
-              <i class="fa-regular fa-comment"></i> 123
+              <i className="fa-regular fa-comment"></i> 123
             </button>
             <button className="flex items-center gap-1 hover:text-green-500 hover:bg-gray-100 px-2 py-1 rounded">
-              <i class="fa-solid fa-retweet"></i> 45
+              <i className="fa-solid fa-retweet"></i> 45
             </button>
             <button className="flex items-center gap-1 hover:text-pink-500 hover:bg-gray-100 px-2 py-1 rounded">
-              <i class="fa-regular fa-heart"></i> 12
+              <i className="fa-regular fa-heart"></i> 12
             </button>
           </div>
         </div>

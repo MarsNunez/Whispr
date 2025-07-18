@@ -8,6 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Estado para indicar carga
 
   useEffect(() => {
     // Check if user is already logged in on mount
@@ -17,7 +18,11 @@ export const AuthProvider = ({ children }) => {
     if (storedUser && token) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
     }
+    setIsLoading(false); // Marcar carga como completa
   }, []); // Runs only on mount
 
   const login = (userData, token) => {
@@ -27,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     // Update state immediately
     setUser(userData);
     setIsAuthenticated(true);
+    setIsLoading(false);
   };
 
   const logout = () => {
@@ -34,10 +40,13 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setUser(null);
     setIsAuthenticated(false);
+    setIsLoading(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
