@@ -9,12 +9,14 @@ import { toast } from "react-toastify"; // Importa react-toastify
 
 const UserAudioStudioView = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
+
   const params = useParams();
   const router = useRouter();
   const [data, setData] = useState({ audios: [] });
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedAudio, setSelectedAudio] = useState(null);
+
   const [formData, setFormData] = useState({
     audio: null,
     title: "",
