@@ -1,4 +1,3 @@
-// app/layout.jsx (o donde esté MainWrapper)
 "use client";
 import { usePathname } from "next/navigation";
 import Navbar from "./components/Navbar";
