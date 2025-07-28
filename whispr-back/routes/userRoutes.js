@@ -3,39 +3,24 @@ import { UserModel } from "../models/User.js";
 import mongoose from "mongoose";
 import { AudioModel } from "../models/Audio.js";
 import { PostModel } from "../models/Post.js";
+import multer from "multer";
+import cloudinary from "../config/cloudinary.js";
 
 const route = Router();
 
-// route.post("/create", async (req, res) => {
-//   try {
-//     const {
-//       userName,
-//       email,
-//       password,
-//       displayName,
-//       bio,
-//       profilePicture,
-//       followers,
-//       interestTags,
-//     } = req.body;
-
-//     const newUser = await UserModel.create({
-//       userName,
-//       email,
-//       password,
-//       displayName,
-//       bio,
-//       profilePicture,
-//       followers,
-//       interestTags,
-//     });
-
-//     res.status(201).json(newUser);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).json({ error: error.message });
-//   }
-// });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB límite para imágenes
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Solo se permiten imágenes"), false);
+    }
+  },
+});
 
 route.post("/create", async (req, res) => {
   try {
@@ -174,6 +159,79 @@ route.put("/:id", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+// UPDATE - Hacer un update de la imagen de perfil.
+route.put(
+  "/update-profile-picture/:userId",
+  upload.single("profilePicture"),
+  async (req, res) => {
+    try {
+      console.log("Body recibido:", req.body); // Depuración
+      console.log("Params recibidos:", req.params); // Depuración
+
+      // Validar si se subió un archivo
+      if (!req.file) {
+        return res.status(400).json({ error: "No se subió ninguna imagen" });
+      }
+
+      // Validar si se proporcionó el ID del usuario
+      const { userId } = req.params;
+      if (!userId) {
+        return res.status(400).json({ error: "ID de usuario requerido" });
+      }
+
+      // Validar que el userId sea un ObjectId válido
+      if (!mongoose.isValidObjectId(userId)) {
+        return res.status(400).json({ error: "ID de usuario inválido" });
+      }
+
+      // Buscar usuario
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+
+      // Subir imagen a Cloudinary
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              resource_type: "image",
+              folder: "profile-pictures",
+              public_id: `user_${userId}_${Date.now()}`,
+            },
+            (error, result) => {
+              if (error) {
+                console.error("Error Cloudinary:", error);
+                reject(error);
+              } else {
+                resolve(result);
+              }
+            }
+          )
+          .end(req.file.buffer);
+      });
+
+      // Actualizar la URL de la imagen de perfil en el modelo
+      user.profilePicture = result.secure_url;
+      await user.save();
+
+      // Respuesta exitosa
+      res.status(200).json({
+        message: "Imagen de perfil actualizada exitosamente",
+        profilePicture: result.secure_url,
+        cloudinaryData: {
+          url: result.secure_url,
+          format: result.format,
+          bytes: result.bytes,
+        },
+      });
+    } catch (error) {
+      console.error("Error al actualizar imagen de perfil:", error);
+      res.status(400).json({ error: error.message });
+    }
+  }
+);
 
 // DELETE - Eliminar un usuario por ID
 route.delete("/:id", async (req, res) => {

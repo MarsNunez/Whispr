@@ -440,7 +440,8 @@ const UserAudioStudioView = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Title <span className="text-red-600">*</span>
+                  Title ({formData.title.length} / 90){" "}
+                  <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
@@ -454,7 +455,7 @@ const UserAudioStudioView = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  Description ({formData.description.length} / 130)
                 </label>
                 <textarea
                   name="description"
@@ -614,7 +615,8 @@ const UserAudioStudioView = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Title <span className="text-red-600">*</span>
+                  Title ({formData.title.length} / 90){" "}
+                  <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
@@ -628,7 +630,7 @@ const UserAudioStudioView = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  Description ({formData.description.length} / 130)
                 </label>
                 <textarea
                   name="description"
