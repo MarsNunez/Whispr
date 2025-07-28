@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify"; // Importa ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Importa los estilos de react-toastify
