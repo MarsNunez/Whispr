@@ -56,17 +56,14 @@ route.get("/", async (req, res) => {
   }
 });
 
-// GET - Obtener todos los audios de un usuario
 route.get("/audios/all/:creatorId", async (req, res) => {
   try {
     const { creatorId } = req.params;
 
-    // Validar que el creatorId sea válido de MongoDB
     if (!mongoose.Types.ObjectId.isValid(creatorId)) {
       return res.status(400).json({ error: "ID de usuario inválido" });
     }
 
-    // Buscar todos los audios del usuario
     const audios = await AudioModel.find({ creatorId: creatorId });
 
     res.status(200).json({
@@ -79,7 +76,6 @@ route.get("/audios/all/:creatorId", async (req, res) => {
   }
 });
 
-// ** GET - Obtener todos los posts de un usuario por ID
 route.get("/posts/all/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
@@ -88,7 +84,7 @@ route.get("/posts/all/:userId", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const posts = await PostModel.find({ authorID: userId })
-      .sort({ createdAt: -1 }) // Más recientes primero
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -110,7 +106,6 @@ route.get("/posts/all/:userId", async (req, res) => {
   }
 });
 
-// GET - Obtener un usuario por ID - (SIMPLE / SEGURO)
 route.get("/:userName", async (req, res) => {
   try {
     const { userName } = req.params;
@@ -138,7 +133,6 @@ route.get("/:userName", async (req, res) => {
   }
 });
 
-// UPDATE - Actualizar un usuario por ID
 route.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -160,8 +154,27 @@ route.put("/:id", async (req, res) => {
   }
 });
 
-// UPDATE - Hacer un update de la imagen de perfil.
-// Ruta para actualizar la imagen de perfil y otros datos
+// Función para extraer el public_id de la URL de Cloudinary
+const getPublicIdFromUrl = (url) => {
+  if (!url) return null;
+  try {
+    const urlParts = url.split("/");
+    const uploadIndex = urlParts.indexOf("upload");
+    if (uploadIndex !== -1 && uploadIndex + 2 < urlParts.length) {
+      const pathParts = urlParts.slice(uploadIndex + 2);
+      const fullPath = pathParts.join("/");
+      const publicId = fullPath.split(".")[0]; // Elimina la extensión
+      console.log("Public_id extraído:", publicId, "URL original:", url);
+      return publicId;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error extrayendo public_id:", error, "URL:", url);
+    return null;
+  }
+};
+
+// UPDATE - Hacer un update de la imagen de perfil
 route.put(
   "/update-profile-picture/:userId",
   upload.single("profilePicture"),
@@ -192,7 +205,6 @@ route.put(
           newUserName = `@${newUserName}`;
         }
 
-        // Verificar si el userName ya está en uso (excluyendo el usuario actual)
         const existingUser = await UserModel.findOne({
           userName: newUserName,
           _id: { $ne: userId },
@@ -205,6 +217,39 @@ route.put(
 
       // Actualizar imagen si se subió
       if (req.file) {
+        // Extraer el public_id de la imagen anterior y eliminarla de Cloudinary
+        if (user.profilePicture) {
+          const oldPublicId = getPublicIdFromUrl(user.profilePicture);
+          if (oldPublicId) {
+            try {
+              const destroyResult = await cloudinary.uploader.destroy(
+                oldPublicId,
+                {
+                  resource_type: "image",
+                }
+              );
+              console.log(`Resultado de eliminación:`, destroyResult);
+              if (destroyResult.result === "ok") {
+                console.log(`Imagen anterior eliminada: ${oldPublicId}`);
+              } else {
+                console.warn(
+                  `No se pudo eliminar la imagen: ${oldPublicId}, Resultado: ${destroyResult.result}`
+                );
+              }
+            } catch (destroyError) {
+              console.error(
+                `Error al eliminar la imagen ${oldPublicId}:`,
+                destroyError
+              );
+            }
+          } else {
+            console.warn(
+              "No se pudo extraer el public_id de la URL:",
+              user.profilePicture
+            );
+          }
+        }
+
         const result = await new Promise((resolve, reject) => {
           cloudinary.uploader
             .upload_stream(
@@ -232,7 +277,6 @@ route.put(
     } catch (error) {
       console.error("Error al actualizar perfil:", error);
       if (error.code === 11000) {
-        // Error de duplicación de índice único
         return res.status(400).json({ error: "El userName ya está en uso" });
       }
       res.status(400).json({ error: error.message });
@@ -240,7 +284,6 @@ route.put(
   }
 );
 
-// DELETE - Eliminar un usuario por ID
 route.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
