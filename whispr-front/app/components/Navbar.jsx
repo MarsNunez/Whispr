@@ -26,6 +26,7 @@ const Navbar = () => {
       <ul className="flex gap-x-7 font-semibold">
         {isAuthenticated ? (
           <div className="flex items-center gap-7">
+            <div className="p-3 rounded-full bg-amber-500" />
             <Link
               href={`/${user.userName}/audios`}
               className="font-normal bg-indigo-600 text-white h-fit px-3 py-1 rounded-lg"

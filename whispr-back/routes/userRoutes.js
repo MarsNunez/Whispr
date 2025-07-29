@@ -161,73 +161,80 @@ route.put("/:id", async (req, res) => {
 });
 
 // UPDATE - Hacer un update de la imagen de perfil.
+// Ruta para actualizar la imagen de perfil y otros datos
 route.put(
   "/update-profile-picture/:userId",
   upload.single("profilePicture"),
   async (req, res) => {
     try {
-      console.log("Body recibido:", req.body); // Depuración
-      console.log("Params recibidos:", req.params); // Depuración
-
-      // Validar si se subió un archivo
-      if (!req.file) {
-        return res.status(400).json({ error: "No se subió ninguna imagen" });
-      }
-
-      // Validar si se proporcionó el ID del usuario
       const { userId } = req.params;
-      if (!userId) {
-        return res.status(400).json({ error: "ID de usuario requerido" });
-      }
-
-      // Validar que el userId sea un ObjectId válido
       if (!mongoose.isValidObjectId(userId)) {
         return res.status(400).json({ error: "ID de usuario inválido" });
       }
 
-      // Buscar usuario
       const user = await UserModel.findById(userId);
       if (!user) {
         return res.status(404).json({ error: "Usuario no encontrado" });
       }
 
-      // Subir imagen a Cloudinary
-      const result = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              resource_type: "image",
-              folder: "profile-pictures",
-              public_id: `user_${userId}_${Date.now()}`,
-            },
-            (error, result) => {
-              if (error) {
-                console.error("Error Cloudinary:", error);
-                reject(error);
-              } else {
-                resolve(result);
-              }
-            }
-          )
-          .end(req.file.buffer);
-      });
+      // Actualizar campos del body
+      if (req.body.displayName) user.displayName = req.body.displayName;
+      if (req.body.bio) user.bio = req.body.bio;
+      if (req.body.interestTags)
+        user.interestTags = req.body.interestTags
+          .split(",")
+          .map((tag) => tag.trim());
 
-      // Actualizar la URL de la imagen de perfil en el modelo
-      user.profilePicture = result.secure_url;
+      // Manejar actualización de userName
+      if (req.body.userName) {
+        let newUserName = req.body.userName.trim();
+        if (!newUserName.startsWith("@")) {
+          newUserName = `@${newUserName}`;
+        }
+
+        // Verificar si el userName ya está en uso (excluyendo el usuario actual)
+        const existingUser = await UserModel.findOne({
+          userName: newUserName,
+          _id: { $ne: userId },
+        });
+        if (existingUser) {
+          return res.status(400).json({ error: "El userName ya está en uso" });
+        }
+        user.userName = newUserName;
+      }
+
+      // Actualizar imagen si se subió
+      if (req.file) {
+        const result = await new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                resource_type: "image",
+                folder: "profile-pictures",
+                public_id: `user_${userId}_${Date.now()}`,
+              },
+              (error, result) => (error ? reject(error) : resolve(result))
+            )
+            .end(req.file.buffer);
+        });
+        user.profilePicture = result.secure_url;
+      }
+
       await user.save();
-
-      // Respuesta exitosa
       res.status(200).json({
-        message: "Imagen de perfil actualizada exitosamente",
-        profilePicture: result.secure_url,
-        cloudinaryData: {
-          url: result.secure_url,
-          format: result.format,
-          bytes: result.bytes,
-        },
+        message: "Perfil actualizado exitosamente",
+        profilePicture: user.profilePicture,
+        displayName: user.displayName,
+        bio: user.bio,
+        interestTags: user.interestTags,
+        userName: user.userName,
       });
     } catch (error) {
-      console.error("Error al actualizar imagen de perfil:", error);
+      console.error("Error al actualizar perfil:", error);
+      if (error.code === 11000) {
+        // Error de duplicación de índice único
+        return res.status(400).json({ error: "El userName ya está en uso" });
+      }
       res.status(400).json({ error: error.message });
     }
   }
