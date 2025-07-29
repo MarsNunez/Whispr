@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 
 const ProfileComponent = ({ userData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +14,7 @@ const ProfileComponent = ({ userData }) => {
   const [userName, setUserName] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const { login } = useAuth(); // Usa el contexto de autenticación
 
   // Efecto para inicializar los estados con userData al montar el componente
   useEffect(() => {
@@ -26,22 +28,20 @@ const ProfileComponent = ({ userData }) => {
     }
   }, [userData]);
 
-  // Función para abrir el modal y actualizar los estados con userData
   const handleImageClick = () => {
     if (userData) {
       setIsModalOpen(true);
-      setError(""); // Resetear error al abrir
+      setError("");
       setDisplayName(userData.displayName || "");
       setBio(userData.bio || "");
       setInterestTags(
         userData.interestTags ? userData.interestTags.join(", ") : ""
       );
       setUserName(userData.userName || "");
-      console.log("Abriendo modal con userData:", userData); // Depuración
+      console.log("Abriendo modal con userData:", userData);
     }
   };
 
-  // Función para cerrar el modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setError("");
@@ -56,17 +56,15 @@ const ProfileComponent = ({ userData }) => {
     }
   };
 
-  // Función para guardar los cambios
   const handleSaveChanges = async () => {
     if (!userData || !userData.id) {
-      // Cambiamos a userData.id
       console.error("userData o userData.id no está definido:", userData);
       setError("Error: Datos de usuario no disponibles.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("userId", userData.id); // Usamos userData.id
+    formData.append("userId", userData.id);
     if (newProfilePicture) {
       formData.append("profilePicture", newProfilePicture);
     }
@@ -78,11 +76,11 @@ const ProfileComponent = ({ userData }) => {
     );
     formData.append("userName", userName);
 
-    console.log("Enviando datos:", { userId: userData.id, formData }); // Depuración
+    console.log("Enviando datos:", { userId: userData.id, formData });
 
     try {
       const response = await axios.put(
-        `http://localhost:3001/users/update-profile-picture/${userData.id}`, // Usamos userData.id
+        `http://localhost:3001/users/update-profile-picture/${userData.id}`,
         formData,
         {
           headers: {
@@ -91,9 +89,30 @@ const ProfileComponent = ({ userData }) => {
         }
       );
       console.log("Perfil actualizado:", response.data);
+
+      // Extraer los datos actualizados del usuario desde la respuesta
+      const updatedUser = {
+        id: userData.id,
+        userName: response.data.userName,
+        displayName: response.data.displayName,
+        email: userData.email, // El email no se actualiza, lo mantenemos del userData original
+        profilePicture: response.data.profilePicture,
+      };
+
+      // Actualizar AuthContext y localStorage con los nuevos datos
+      const token = localStorage.getItem("token"); // Reutiliza el token existente
+      login(updatedUser, token);
+
+      // Forzar la redirección para refrescar la página
       setIsModalOpen(false);
-      router.push(`/profile/${userName}`);
+      // router.push(`/profile/${userName}`);
+      // Opcional: Forzar recarga completa si es necesario
+      window.location.href = `/profile/${userName}`;
     } catch (error) {
+      console.error(
+        "Error al actualizar el perfil:",
+        error.response ? error.response.data : error.message
+      );
       if (
         error.response &&
         error.response.data.error === "El userName ya está en uso"
