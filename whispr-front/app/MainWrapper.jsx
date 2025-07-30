@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/AuthContext";
-import { ToastContainer } from "react-toastify"; // Importa ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Importa los estilos de react-toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MainWrapper = ({ children }) => {
   const pathname = usePathname();
@@ -31,7 +31,7 @@ const MainWrapper = ({ children }) => {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme="light" // Nota: Considera usar theme="colored" o manejar el tema dinámicamente
         />
       </div>
     </AuthProvider>

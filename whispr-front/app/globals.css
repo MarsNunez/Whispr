@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-/* Tema base con transición */
-body {
-  transition: background-image 1s ease, color 1s ease; /* Transición suave */
-}
-
 /* LIGHT 094 Cloudy Apple */
 .light-theme {
   background-image: linear-gradient(
@@ -13,16 +8,14 @@ body {
     #e3eeff 99%,
     #e3eeff 100%
   );
-  /* Color de texto para contraste */
   color: #1d3f55;
 }
 
 /* DARK 103 Midnight Bloom */
-.dark-theme {
+/* .dark-theme {
   background-image: linear-gradient(-20deg, #102e42 0%, #4e4376 100%);
-  /* Color de texto para contraste */
   color: #dbeafe;
-}
+} */
 
 .jost {
   font-family: "Jost", sans-serif;
