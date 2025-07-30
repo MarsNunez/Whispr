@@ -88,25 +88,19 @@ const ProfileComponent = ({ userData }) => {
           },
         }
       );
-      console.log("Perfil actualizado:", response.data);
 
-      // Extraer los datos actualizados del usuario desde la respuesta
       const updatedUser = {
         id: userData.id,
         userName: response.data.userName,
         displayName: response.data.displayName,
-        email: userData.email, // El email no se actualiza, lo mantenemos del userData original
+        email: userData.email,
         profilePicture: response.data.profilePicture,
       };
 
-      // Actualizar AuthContext y localStorage con los nuevos datos
-      const token = localStorage.getItem("token"); // Reutiliza el token existente
+      const token = localStorage.getItem("token");
       login(updatedUser, token);
 
-      // Forzar la redirección para refrescar la página
       setIsModalOpen(false);
-      // router.push(`/profile/${userName}`);
-      // Opcional: Forzar recarga completa si es necesario
       window.location.href = `/profile/${userName}`;
     } catch (error) {
       console.error(

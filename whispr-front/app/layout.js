@@ -20,7 +20,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="light-theme dark:dark-theme duration-700">
       <head>
         <link
           rel="stylesheet"

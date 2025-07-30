@@ -41,7 +41,7 @@ export default function Home() {
                 <i className="fa-solid fa-microphone-lines text-amber-600"></i>
                 <p className="font-bold">500+</p>
               </div>
-              <p className="text-lg text-gray-600 tracking-wide">
+              <p className="text-lg text-gray-600 tracking-wide dark:text-blue-100">
                 Episodes Produced
               </p>
             </div>
@@ -59,7 +59,7 @@ export default function Home() {
                 <i className="fa-solid fa-user-group text-cyan-700"></i>
                 <p className="font-bold">1M+</p>
               </div>
-              <p className="text-lg text-gray-600 tracking-wide">
+              <p className="text-lg text-gray-600 tracking-wide dark:text-blue-100">
                 Listeners Reached
               </p>
             </div>
