@@ -52,11 +52,11 @@ const Navbar = () => {
               Log out
             </button>
             <Link href={`/profile/${user.userName}`}>
-              <figure className="h-10">
+              <figure className="h-10 w-10">
                 <img
                   src={user.profilePicture}
                   alt="profilePicture"
-                  className="h-full rounded-lg"
+                  className="h-full w-full rounded-lg object-cover border border-blue-200"
                 />
               </figure>
             </Link>

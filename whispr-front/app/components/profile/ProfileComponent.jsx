@@ -145,21 +145,19 @@ const ProfileComponent = ({ userData }) => {
           )}
         </div>
 
-        <figure
-          className="justify-self-end cursor-pointer"
-          onClick={handleImageClick}
-        >
+        <div className="w-full max-w-[27rem] aspect-square ml-auto">
           <img
+            onClick={handleImageClick}
             src={userData.profilePicture}
             alt="profile picture"
-            className="w-full max-w-[27rem] rounded-3xl shadowing"
+            className="w-full h-full rounded-3xl shadowing object-cover cursor-pointer justify-self-end"
           />
-        </figure>
+        </div>
       </div>
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-slate-400/50 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
             <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
             <div className="space-y-4">
@@ -177,7 +175,7 @@ const ProfileComponent = ({ userData }) => {
                   <img
                     src={userData.profilePicture}
                     alt="Current profile"
-                    className="mt-2 w-32 h-32 object-cover rounded-full"
+                    className="mt-2 w-32 h-32 object-cover rounded-2xl mx-auto border-2 border-[#1d3f55]"
                   />
                 )}
               </div>

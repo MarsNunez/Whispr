@@ -28,8 +28,6 @@ const ProfileView = () => {
     getData();
   }, [params.userName]);
 
-  const { user } = useAuth();
-
   return (
     <section className="pb-20 mt-10">
       <div className="w-fit mx-auto mb-10">
