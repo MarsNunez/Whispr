@@ -35,12 +35,81 @@ const UserAudioStudioView = () => {
     }
   }, [isLoading, isAuthenticated, router]);
 
+  // // Cargar datos del usuario y sus audios
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:3001/audios/audiosByUserName/${params.userName}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       );
+  //       setData({
+  //         ...response.data,
+  //         audios: response.data.audios
+  //           ? response.data.audios.filter((audio) => audio && audio._id)
+  //           : [],
+  //       });
+  //       console.log("Datos del usuario:", response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //       toast.error("Error al cargar los datos del usuario");
+  //     }
+  //   };
+  //   if (isAuthenticated) {
+  //     getData();
+  //   }
+  // }, [params.userName, isAuthenticated]);
+  // Cargar datos del usuario y sus audios
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await axios.post(
+  //         "http://localhost:3001/audios/audiosByUserId",
+  //         { id: "686eae5735381dafaabbb11d" },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       );
+  //       // setData({
+  //       //   ...response.data,
+  //       //   audios: response.data.audios
+  //       //     ? response.data.audios.filter((audio) => audio && audio._id)
+  //       //     : [],
+  //       // });
+  //       console.log("Respuesta completa:", response);
+  //       console.log("Datos del usuario:", response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", {
+  //         message: error.message,
+  //         response: error.response ? error.response.data : "No response",
+  //         status: error.response ? error.response.status : "No status",
+  //       });
+  //     }
+  //   };
+
+  //   if (isAuthenticated) {
+  //     getData();
+  //   }
+  // }, [user?.id, isAuthenticated]); // Dependencias actualizadas
   // Cargar datos del usuario y sus audios
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/audios/audiosByUserName/${params.userName}`,
+        if (!user?.id) {
+          console.error("ID de usuario no disponible");
+          toast.error("Error: ID de usuario no disponible");
+          return;
+        }
+
+        const response = await axios.post(
+          "http://localhost:3001/audios/audiosByUserId", // Nueva ruta POST
+          { id: user.id }, // Enviar el id en el cuerpo
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -54,15 +123,17 @@ const UserAudioStudioView = () => {
             : [],
         });
         console.log("Datos del usuario:", response.data);
+        console.log("Datos del usuario:", user.id);
       } catch (error) {
         console.error("Error fetching user data:", error);
         toast.error("Error al cargar los datos del usuario");
       }
     };
+
     if (isAuthenticated) {
       getData();
     }
-  }, [params.userName, isAuthenticated]);
+  }, [user?.id, isAuthenticated]); // Dependencias actualizadas
 
   // Manejar cambios en los inputs del formulario
   const handleInputChange = (e) => {

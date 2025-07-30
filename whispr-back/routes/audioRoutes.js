@@ -307,18 +307,53 @@ route.patch("/:id", upload.single("audio"), async (req, res) => {
 });
 
 // GET - Obtener todos los audios por userName
-route.get("/audiosByUserName/:userName", async (req, res) => {
-  try {
-    const { userName } = req.params;
+// route.get("/audiosByUserName/:userName", async (req, res) => {
+//   try {
+//     const { userName } = req.params;
 
-    // Validar que se proporcionó un userName
-    if (!userName) {
-      return res.status(400).json({ error: "El userName es requerido" });
+//     // Validar que se proporcionó un userName
+//     if (!userName) {
+//       return res.status(400).json({ error: "El userName es requerido" });
+//     }
+
+//     // Buscar todos los audios que coincidan con el userName
+//     const audios = await AudioModel.find({ userName });
+//     const userData = await UserModel.findOne({ userName });
+
+//     // Verificar si se encontraron audios
+//     if (!audios || audios.length === 0) {
+//       return res.status(200).json({ message: "0 audios." });
+//     }
+
+//     res.status(200).json({
+//       user: {
+//         id: userData._id,
+//         userName: userData.userName,
+//         displayName: userData.displayName,
+//         email: userData.email,
+//         profilePicture: userData.profilePicture,
+//       },
+//       audios,
+//     });
+//   } catch (error) {
+//     console.error("Error al obtener audios por userName:", error);
+//     res
+//       .status(500)
+//       .json({ error: "Error interno del servidor", details: error.message });
+//   }
+// });
+route.post("/audiosByUserId", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    // Buscar el usuario por ID
+    const userData = await UserModel.findById(id);
+    if (!userData) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Buscar todos los audios que coincidan con el userName
-    const audios = await AudioModel.find({ userName });
-    const userData = await UserModel.findOne({ userName });
+    // Buscar todos los audios que coincidan con el userName del usuario encontrado
+    const audios = await AudioModel.find({ creatorId: id });
 
     // Verificar si se encontraron audios
     if (!audios || audios.length === 0) {
@@ -336,7 +371,7 @@ route.get("/audiosByUserName/:userName", async (req, res) => {
       audios,
     });
   } catch (error) {
-    console.error("Error al obtener audios por userName:", error);
+    console.error("Error al obtener audios por ID:", error);
     res
       .status(500)
       .json({ error: "Error interno del servidor", details: error.message });
