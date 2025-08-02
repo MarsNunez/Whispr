@@ -15,7 +15,7 @@ const MainWrapper = ({ children }) => {
 
   return (
     <AuthProvider>
-      <div>
+      <div className="min-h-screen">
         {!shouldHideNavbar && <Navbar />}
         <main className={`${!shouldHideNavbar && "max-w-7xl"} mx-auto`}>
           {children}
