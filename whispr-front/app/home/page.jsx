@@ -12,17 +12,21 @@ const Home = () => {
         />
       </div>
       <div className="border mt-8">
-        <div>
-          <h2>What's new?</h2>
+        <div className="mb-6">
+          <h2 className="jost text-2xl font-medium ml-3 mb-2">What's new?</h2>
           <AudioCard />
         </div>
-        <div>
-          <h2>Most liked songs</h2>
-          songs here
+        <div className="mb-6">
+          <h2 className="jost text-2xl font-medium ml-3 mb-2">
+            Most liked songs
+          </h2>
+          <AudioCard />
         </div>
-        <div>
-          <h2>Popular artists</h2>
-          songs here
+        <div className="mb-6">
+          <h2 className="jost text-2xl font-medium ml-3 mb-2">
+            Popular artists
+          </h2>
+          <AudioCard />
         </div>
       </div>
     </section>

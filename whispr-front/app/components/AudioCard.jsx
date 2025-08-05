@@ -6,7 +6,7 @@ const AudioCard = () => {
           <img
             src="/img/sf.jpg"
             alt="Audio card"
-            className="w-full object-cover min-h-40 rounded-xl shadow-md"
+            className="w-full object-cover min-h-40 rounded-xl"
           />
           <div
             className="absolute flex text-xs gap-1 px-1 py-1 flex-wrap top-0 rounded-t-xl w-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
