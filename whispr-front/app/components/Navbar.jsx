@@ -30,7 +30,9 @@ const Navbar = () => {
           <h1 className="text-2xl font-semibold pb-1 jost">Whispr .</h1>
         </Link>
         <ul className="flex gap-x-7">
-          <li className="pb-1 jost">Home</li>
+          <Link href={"/home"} className="pb-1 jost">
+            Home
+          </Link>
           <li className="pb-1 jost">Categories</li>
           <li className="pb-1 jost">Creators</li>
         </ul>
