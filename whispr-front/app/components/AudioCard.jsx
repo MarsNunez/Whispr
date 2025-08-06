@@ -1,7 +1,7 @@
 const AudioCard = () => {
   return (
     <div className="border border-transparent w-fit rounded-xl hover:bg-gray-300 group duration-200">
-      <div className="max-w-40 m-3">
+      <div className="w-40 m-3">
         <div className="mb-3 relative overflow-hidden">
           <img
             src="/img/sf.jpg"

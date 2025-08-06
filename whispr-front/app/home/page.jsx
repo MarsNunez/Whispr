@@ -1,4 +1,5 @@
 import AudioCard from "../components/AudioCard";
+import UserCard from "../components/UserCard";
 
 const Home = () => {
   return (
@@ -11,22 +12,39 @@ const Home = () => {
           placeholder="What do you want to play?"
         />
       </div>
-      <div className="border mt-8">
+      <div className="mt-8">
         <div className="mb-6">
           <h2 className="jost text-2xl font-medium ml-3 mb-2">What's new?</h2>
-          <AudioCard />
+          <div className="flex gap-x-2 overflow-scroll">
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+          </div>
         </div>
         <div className="mb-6">
           <h2 className="jost text-2xl font-medium ml-3 mb-2">
             Most liked songs
           </h2>
-          <AudioCard />
+          <div className="flex gap-x-2 overflow-scroll">
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+            <AudioCard />
+          </div>
         </div>
         <div className="mb-6">
           <h2 className="jost text-2xl font-medium ml-3 mb-2">
             Popular artists
           </h2>
-          <AudioCard />
+          <div className="flex gap-x-2 overflow-scroll">
+            <UserCard />
+            <UserCard />
+          </div>
         </div>
       </div>
     </section>
