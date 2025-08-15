@@ -39,7 +39,7 @@ const Home = () => {
         </div>
         <div className="mb-6">
           <h2 className="jost text-2xl font-medium ml-3 mb-2">
-            Popular artists
+            Popular artist s
           </h2>
           <div className="flex gap-x-2 overflow-scroll">
             <UserCard />
