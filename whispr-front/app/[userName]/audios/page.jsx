@@ -3,6 +3,7 @@
 
 import { useAuth } from "@/app/context/AuthContext";
 import axios from "axios";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify"; // Importa react-toastify
@@ -53,6 +54,7 @@ const UserAudioStudioView = () => {
             },
           }
         );
+
         setData({
           ...response.data,
           audios: response.data.audios
@@ -745,11 +747,14 @@ const UserAudioStudioView = () => {
                     key={audio._id}
                   >
                     <td className="flex items-center justify-center">
-                      <img
-                        src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
-                        alt="audio image"
-                        className="w-20 py-5"
-                      />
+                      <Link href={`/${audio.userName}/audios/${audio._id}`}>
+                        {/* <Link href={`/`}> */}
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
+                          alt="audio image"
+                          className="w-20 py-5"
+                        />
+                      </Link>
                     </td>
                     <td className="max-w-[7rem]">
                       <div className="line-clamp-2">
