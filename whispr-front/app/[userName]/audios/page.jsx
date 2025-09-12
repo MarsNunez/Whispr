@@ -748,6 +748,7 @@ const UserAudioStudioView = () => {
                   >
                     <td className="flex items-center justify-center">
                       <Link href={`/${audio.userName}/audios/${audio._id}`}>
+                        {/* <Link href={`/${audio.userName}/audios/${audio._id}`}> */}
                         {/* <Link href={`/`}> */}
                         <img
                           src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
