@@ -6,7 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify"; // Importa react-toastify
+import { toast } from "react-toastify";
 
 const UserAudioStudioView = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
