@@ -41,7 +41,7 @@ const Navbar = () => {
         {isAuthenticated ? (
           <div className="flex items-center gap-7">
             <Link
-              href={`/${user.userName}/audios`}
+              href={`/${user.userName}`}
               className="font-normal bg-indigo-600 text-white h-fit px-3 py-1 rounded-lg"
             >
               My Audios
