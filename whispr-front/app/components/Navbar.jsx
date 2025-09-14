@@ -38,22 +38,28 @@ const Navbar = () => {
           >
             Home
           </Link>
-          <li className="pb-1 jost hover:text-indigo-600 transition-colors cursor-pointer">
+          <Link
+            href={"/categories"}
+            className="pb-1 jost hover:text-indigo-600 transition-colors"
+          >
             Categories
-          </li>
-          <li className="pb-1 jost hover:text-indigo-600 transition-colors cursor-pointer">
+          </Link>
+          <Link
+            href={"/creators"}
+            className="pb-1 jost hover:text-indigo-600 transition-colors"
+          >
             Creators
-          </li>
+          </Link>
         </ul>
       </div>
       <ul className="flex gap-x-2 sm:gap-x-4 lg:gap-x-7 font-semibold items-center">
         {isAuthenticated ? (
           <div className="flex items-center gap-2 sm:gap-4 lg:gap-7">
             <Link
-              href={`/${user.userName}`}
+              href={`/audios`}
               className="font-normal bg-indigo-600 text-white h-fit px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm hover:bg-indigo-700 transition-colors"
             >
-              <span className="hidden sm:inline">My Audios</span>
+              <span className="hidden sm:inline">Audios</span>
               <span className="sm:hidden">Audios</span>
             </Link>
             <div className="hidden sm:block mx-1 font-normal">|</div>
