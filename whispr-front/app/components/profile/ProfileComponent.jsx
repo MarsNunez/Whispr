@@ -120,24 +120,24 @@ const ProfileComponent = ({ userData }) => {
 
   return (
     <section>
-      <div className="grid grid-cols-2 gap-8 max-w-6xl mx-auto ">
-        <div className="max-w-xl w-full">
-          <p className="text-gray-700/85">{userData.userName}</p>
-          <h2 className="text-5xl font-semibold mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl w-full">
+          <p className="text-gray-700/85 text-sm sm:text-base">{userData.userName}</p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-4 sm:mb-6">
             {userData.displayName}
           </h2>
-          <p className="jost text-lg w-full">
+          <p className="jost text-base sm:text-lg w-full">
             {!userData.bio
               ? "It's a show about the life of the digital nomads all over the world and what they struggle with or what happens to them when they travel."
               : userData.bio}
           </p>
-          <p className="text-lg uppercase font-medium jost tracking-widest text-gray-800/45 mt-6">
+          <p className="text-base sm:text-lg uppercase font-medium jost tracking-widest text-gray-800/45 mt-4 sm:mt-6">
             Interest Tags:
           </p>
           {userData.interestTags && (
-            <div className="flex jost flex-wrap mt-2 gap-4">
+            <div className="flex jost flex-wrap mt-2 gap-2 sm:gap-3">
               {userData.interestTags.map((tag) => (
-                <div key={tag} className="border text-lg px-4 py-1 rounded-lg">
+                <div key={tag} className="border text-sm sm:text-base px-3 sm:px-4 py-1 rounded-lg">
                   {tag}
                 </div>
               ))}
@@ -145,7 +145,7 @@ const ProfileComponent = ({ userData }) => {
           )}
         </div>
 
-        <div className="w-full max-w-[27rem] aspect-square ml-auto">
+        <div className="w-full max-w-[18rem] sm:max-w-[22rem] md:max-w-[27rem] aspect-square md:ml-auto mx-auto mt-6 md:mt-0">
           <img
             onClick={handleImageClick}
             src={userData.profilePicture}
@@ -241,68 +241,68 @@ const ProfileComponent = ({ userData }) => {
       )}
 
       {/* LATEST AUDIOS */}
-      <div className="max-w-6xl mx-auto mt-14">
-        <h3 className="text-gray-600/80 text-2xl tracking-wider font-semibold mb-7">
+      <div className="max-w-6xl mx-auto mt-10 sm:mt-14 px-4 sm:px-6 lg:px-8">
+        <h3 className="text-gray-600/80 text-xl sm:text-2xl tracking-wider font-semibold mb-5 sm:mb-7">
           Latest Audios
         </h3>
-        <div className="grid grid-cols-6">
-          <div className="max-w-40">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+          <div className="w-full">
             <img
               src={userData.profilePicture}
               alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
+              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
             />
-            <h5 className="text-gray-600/80 font-medium">
+            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
               {"Episode 07: Goodbye boring, hello adventure "}
             </h5>
           </div>
-          <div className="max-w-40">
+          <div className="w-full">
             <img
               src={userData.profilePicture}
               alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
+              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
             />
-            <h5 className="text-gray-600/80 font-medium">
+            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
               {"Episode 07: Goodbye boring, hello adventure "}
             </h5>
           </div>
-          <div className="max-w-40">
+          <div className="w-full">
             <img
               src={userData.profilePicture}
               alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
+              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
             />
-            <h5 className="text-gray-600/80 font-medium">
+            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
               {"Episode 07: Goodbye boring, hello adventure "}
             </h5>
           </div>
-          <div className="max-w-40">
+          <div className="w-full">
             <img
               src={userData.profilePicture}
               alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
+              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
             />
-            <h5 className="text-gray-600/80 font-medium">
+            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
               {"Episode 07: Goodbye boring, hello adventure "}
             </h5>
           </div>
-          <div className="max-w-40">
+          <div className="w-full">
             <img
               src={userData.profilePicture}
               alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
+              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
             />
-            <h5 className="text-gray-600/80 font-medium">
+            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
               {"Episode 07: Goodbye boring, hello adventure "}
             </h5>
           </div>
-          <div className="max-w-40">
+          <div className="w-full">
             <img
               src={userData.profilePicture}
               alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-3"
+              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
             />
-            <h5 className="text-gray-600/80 font-medium">
+            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
               {"Episode 07: Goodbye boring, hello adventure "}
             </h5>
           </div>
