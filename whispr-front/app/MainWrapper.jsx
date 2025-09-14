@@ -15,9 +15,13 @@ const MainWrapper = ({ children }) => {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen">
+      <div className="min-h-screen flex flex-col">
         {!shouldHideNavbar && <Navbar />}
-        <main className={`${!shouldHideNavbar && "max-w-7xl"} mx-auto`}>
+        <main
+          className={`${
+            !shouldHideNavbar && "max-w-7xl"
+          } mx-auto flex-1 w-full px-4 sm:px-6 lg:px-8`}
+        >
           {children}
           {!shouldHideNavbar && <Footer />}
         </main>
@@ -31,7 +35,8 @@ const MainWrapper = ({ children }) => {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light" // Nota: Considera usar theme="colored" o manejar el tema dinámicamente
+          theme="light"
+          className="text-sm sm:text-base"
         />
       </div>
     </AuthProvider>

@@ -24,37 +24,48 @@ const Navbar = () => {
   if (!mounted) return null;
 
   return (
-    <nav className="flex items-center justify-between text-sm px-8 pt-2 pb-1">
-      <div className="flex items-center gap-18">
+    <nav className="flex items-center justify-between text-sm px-4 sm:px-6 lg:px-8 pt-2 pb-1">
+      <div className="flex items-center gap-4 sm:gap-8 lg:gap-18">
         <Link href="/">
-          <h1 className="text-2xl font-semibold pb-1 jost">Whispr .</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold pb-1 jost">
+            Whispr .
+          </h1>
         </Link>
-        <ul className="flex gap-x-7">
-          <Link href={"/home"} className="pb-1 jost">
+        <ul className="hidden sm:flex gap-x-4 lg:gap-x-7">
+          <Link
+            href={"/home"}
+            className="pb-1 jost hover:text-indigo-600 transition-colors"
+          >
             Home
           </Link>
-          <li className="pb-1 jost">Categories</li>
-          <li className="pb-1 jost">Creators</li>
+          <li className="pb-1 jost hover:text-indigo-600 transition-colors cursor-pointer">
+            Categories
+          </li>
+          <li className="pb-1 jost hover:text-indigo-600 transition-colors cursor-pointer">
+            Creators
+          </li>
         </ul>
       </div>
-      <ul className="flex gap-x-7 font-semibold items-center">
+      <ul className="flex gap-x-2 sm:gap-x-4 lg:gap-x-7 font-semibold items-center">
         {isAuthenticated ? (
-          <div className="flex items-center gap-7">
+          <div className="flex items-center gap-2 sm:gap-4 lg:gap-7">
             <Link
               href={`/${user.userName}`}
-              className="font-normal bg-indigo-600 text-white h-fit px-3 py-1 rounded-lg"
+              className="font-normal bg-indigo-600 text-white h-fit px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm hover:bg-indigo-700 transition-colors"
             >
-              My Audios
+              <span className="hidden sm:inline">My Audios</span>
+              <span className="sm:hidden">Audios</span>
             </Link>
-            <div className="mx-1 font-normal">|</div>
+            <div className="hidden sm:block mx-1 font-normal">|</div>
             <button
               onClick={handleLogout}
-              className="bg-gray-800 text-white h-fit px-3 py-1 rounded-lg cursor-pointer"
+              className="bg-gray-800 text-white h-fit px-2 sm:px-3 py-1 rounded-lg cursor-pointer text-xs sm:text-sm hover:bg-gray-700 transition-colors"
             >
-              Log out
+              <span className="hidden sm:inline">Log out</span>
+              <span className="sm:hidden">Out</span>
             </button>
             <Link href={`/profile/${user.userName}`}>
-              <figure className="h-10 w-10">
+              <figure className="h-8 w-8 sm:h-10 sm:w-10">
                 <img
                   src={user.profilePicture}
                   alt="profilePicture"
@@ -65,10 +76,16 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            <Link href="/login" className="jost">
+            <Link
+              href="/login"
+              className="jost hover:text-indigo-600 transition-colors text-xs sm:text-sm"
+            >
               Log in
             </Link>
-            <Link href="/register" className="jost">
+            <Link
+              href="/register"
+              className="jost hover:text-indigo-600 transition-colors text-xs sm:text-sm"
+            >
               Register
             </Link>
           </>

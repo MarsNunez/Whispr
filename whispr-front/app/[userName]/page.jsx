@@ -340,41 +340,44 @@ const UserAudioStudioView = () => {
   }
 
   return (
-    <section className="py-15">
+    <section className="py-8 sm:py-12 lg:py-15 px-4 sm:px-6 lg:px-8">
       {data.user && (
-        <div>
+        <div className="text-center mb-6 sm:mb-8">
           <img
             src={data.user.profilePicture}
             alt="Profile picture"
-            className="w-44 h-44 border-[#1d3f55] border-2 rounded-full object-cover mx-auto"
+            className="w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44 border-[#1d3f55] border-2 rounded-full object-cover mx-auto"
           />
-          <div className="text-center my-4 text-sm flex flex-col gap-1">
-            <p>
+          <div className="text-center my-4 text-xs sm:text-sm flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
+            <p className="flex items-center justify-center gap-1">
               <i className="fa-solid text-xs fa-music"></i> Audios:{" "}
-              {data.audios.length}
+              {data.audios?.length ?? 0}
             </p>
-            <p>
+            <p className="flex items-center justify-center gap-1">
               <i className="fa-solid text-xs fa-user-plus"></i> Followers: 20
             </p>
-            <p>
+            <p className="flex items-center justify-center gap-1">
               <i className="fa-solid text-xs fa-cake-candles"></i> Joined:
               20/2/20
             </p>
           </div>
         </div>
       )}
-      <div className="max-w-6xl mx-auto grid grid-cols-3">
-        <h1 className="text-center jost font-medium text-3xl col-start-2">
-          My Audios Studio
-        </h1>
-        <button
-          className="col-start-3 justify-self-end bg-indigo-600 text-white px-4 py-2 rounded-lg disabled:bg-indigo-400"
-          onClick={() => setIsCreateModalOpen(true)}
-          disabled={!isAuthenticated || isSubmitting}
-        >
-          <i className="fa-solid fa-plus mr-2"></i>
-          Create
-        </button>
+
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+          <h1 className="text-center sm:text-left jost font-medium text-2xl sm:text-3xl">
+            My Audios Studio
+          </h1>
+          <button
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg disabled:bg-indigo-400 text-sm sm:text-base hover:bg-indigo-700 transition-colors"
+            onClick={() => setIsCreateModalOpen(true)}
+            disabled={!isAuthenticated || isSubmitting}
+          >
+            <i className="fa-solid fa-plus mr-2"></i>
+            Create
+          </button>
+        </div>
       </div>
 
       {/* Create Modal */}
@@ -516,8 +519,8 @@ const UserAudioStudioView = () => {
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter price (0 for free)"
-                  min="0"
-                  step="0.01"
+                  min={0}
+                  step={0.01}
                 />
               </div>
               <div className="flex justify-end gap-4">
@@ -691,8 +694,8 @@ const UserAudioStudioView = () => {
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter price (0 for free)"
-                  min="0"
-                  step="0.01"
+                  min={0}
+                  step={0.01}
                 />
               </div>
               <div className="flex justify-end gap-4">
@@ -717,90 +720,175 @@ const UserAudioStudioView = () => {
         </div>
       )}
 
-      <section className="max-w-6xl mx-auto mt-16">
-        <table className="w-full">
-          <thead className="pb-5">
-            <tr>
-              <th>Thumbnail</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Likes</th>
-              <th>Tags</th>
-              <th>Visibility</th>
-              <th>Price</th>
-              <th>Plays</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          {data.audios && (
-            <tbody className="mx-10">
-              {data.audios
-                .filter((audio) => audio && audio._id)
-                .map((audio, index) => (
-                  <tr
-                    className={`text-center ${
-                      index === data.audios.filter((a) => a && a._id).length - 1
-                        ? ""
-                        : "border-bottom border-gray-300"
-                    }`}
-                    key={audio._id}
-                  >
-                    <td className="flex items-center justify-center">
-                      <Link href={`/audios/${audio._id}`}>
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
-                          alt="audio image"
-                          className="w-20 py-5"
-                        />
-                      </Link>
-                    </td>
-                    <td className="max-w-[7rem]">
-                      <div className="line-clamp-2">
+      <section className="max-w-6xl mx-auto mt-8 sm:mt-12 lg:mt-16">
+        {/* Desktop Table */}
+        <div className="hidden lg:block overflow-x-auto">
+          <table className="w-full">
+            <thead className="pb-5">
+              <tr>
+                <th className="text-left">Thumbnail</th>
+                <th className="text-left">Title</th>
+                <th className="text-left">Description</th>
+                <th className="text-center">Likes</th>
+                <th className="text-left">Tags</th>
+                <th className="text-center">Visibility</th>
+                <th className="text-center">Price</th>
+                <th className="text-center">Plays</th>
+                <th className="text-center">Edit</th>
+                <th className="text-center">Delete</th>
+              </tr>
+            </thead>
+
+            {data.audios && (
+              <tbody>
+                {data.audios
+                  .filter((audio) => audio && audio._id)
+                  .map((audio, index) => (
+                    <tr
+                      className={`text-center ${
+                        index ===
+                        data.audios.filter((a) => a && a._id).length - 1
+                          ? ""
+                          : "border-b border-gray-300"
+                      }`}
+                      key={audio._id}
+                    >
+                      <td className="flex items-center justify-center">
+                        <Link href={`/audios/${audio._id}`}>
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
+                            alt="audio image"
+                            className="w-20 py-5"
+                          />
+                        </Link>
+                      </td>
+                      <td className="max-w-[7rem]">
+                        <div className="line-clamp-2">
+                          {audio.title || "Sin título"}
+                        </div>
+                      </td>
+                      <td className="max-w-[10rem] px-5">
+                        <div className="line-clamp-2">
+                          {audio.description || "No description"}
+                        </div>
+                      </td>
+                      <td>{audio.likeCount || 0}</td>
+                      <td>
+                        {Array.isArray(audio.tags) && audio.tags.length > 0 ? (
+                          audio.tags.map((tag, index) => (
+                            <p key={index}>{tag}</p>
+                          ))
+                        ) : (
+                          <p>No tags</p>
+                        )}
+                      </td>
+                      <td>{audio.visibility || "public"}</td>
+                      <td>{audio.price || 0}</td>
+                      <td>{audio.playCount || 0}</td>
+                      <td>
+                        <button
+                          className="bg-green-600 text-white py-1 px-2 rounded-lg disabled:bg-green-400"
+                          onClick={() => handleEditClick(audio)}
+                          disabled={!isAuthenticated || isSubmitting}
+                        >
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="bg-red-600 text-white py-1 px-2 rounded-lg disabled:bg-red-400"
+                          onClick={() => handleDelete(audio._id)}
+                          disabled={!isAuthenticated || isSubmitting}
+                        >
+                          <i className="fa-solid fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            )}
+          </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="lg:hidden space-y-4">
+          {data.audios &&
+            data.audios
+              .filter((audio) => audio && audio._id)
+              .map((audio) => (
+                <div
+                  key={audio._id}
+                  className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
+                >
+                  <div className="flex items-start gap-4">
+                    <Link
+                      href={`/audios/${audio._id}`}
+                      className="flex-shrink-0"
+                    >
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/12165/12165108.png"
+                        alt="audio image"
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                    </Link>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-lg mb-2 line-clamp-2">
                         {audio.title || "Sin título"}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        {audio.description || "No description"}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {Array.isArray(audio.tags) && audio.tags.length > 0 ? (
+                          audio.tags.map((tag, index) => (
+                            <span
+                              key={index}
+                              className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs"
+                            >
+                              {tag}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-gray-500 text-xs">No tags</span>
+                        )}
                       </div>
-                    </td>
-                    <td className="max-w-[10rem] px-5">
-                      <div className="line-clamp-2">
-                        {audio.description
-                          ? audio.description
-                          : "No description"}
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-4 text-sm text-gray-600">
+                          <span>
+                            <i className="fa-solid fa-heart mr-1"></i>
+                            {audio.likeCount || 0}
+                          </span>
+                          <span>
+                            <i className="fa-solid fa-play mr-1"></i>
+                            {audio.playCount || 0}
+                          </span>
+                          <span className="capitalize">
+                            {audio.visibility || "public"}
+                          </span>
+                          <span>${audio.price || 0}</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            className="bg-green-600 text-white py-1 px-2 rounded-lg disabled:bg-green-400 text-sm"
+                            onClick={() => handleEditClick(audio)}
+                            disabled={!isAuthenticated || isSubmitting}
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            className="bg-red-600 text-white py-1 px-2 rounded-lg disabled:bg-red-400 text-sm"
+                            onClick={() => handleDelete(audio._id)}
+                            disabled={!isAuthenticated || isSubmitting}
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
                       </div>
-                    </td>
-                    <td>{audio.likeCount || 0}</td>
-                    <td>
-                      {Array.isArray(audio.tags) && audio.tags.length > 0 ? (
-                        audio.tags.map((tag, index) => <p key={index}>{tag}</p>)
-                      ) : (
-                        <p>No tags </p>
-                      )}
-                    </td>
-                    <td>{audio.visibility || "public"}</td>
-                    <td>{audio.price || 0}</td>
-                    <td>{audio.playCount || 0}</td>
-                    <td>
-                      <button
-                        className="bg-green-600 text-white py-1 px-2 rounded-lg disabled:bg-green-400"
-                        onClick={() => handleEditClick(audio)}
-                        disabled={!isAuthenticated || isSubmitting}
-                      >
-                        <i className="fa-solid fa-pen-to-square"></i>
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="bg-red-600 text-white py-1 px-2 rounded-lg disabled:bg-red-400"
-                        onClick={() => handleDelete(audio._id)}
-                        disabled={!isAuthenticated || isSubmitting}
-                      >
-                        <i className="fa-solid fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          )}
-        </table>
+                    </div>
+                  </div>
+                </div>
+              ))}
+        </div>
       </section>
     </section>
   );
