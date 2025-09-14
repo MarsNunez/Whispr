@@ -774,7 +774,7 @@ const UserAudioStudioView = () => {
                       {Array.isArray(audio.tags) && audio.tags.length > 0 ? (
                         audio.tags.map((tag, index) => <p key={index}>{tag}</p>)
                       ) : (
-                        <p>No tags</p>
+                        <p>No tags </p>
                       )}
                     </td>
                     <td>{audio.visibility || "public"}</td>
