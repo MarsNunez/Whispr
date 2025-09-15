@@ -1,7 +1,6 @@
 "use client";
 
 import AudiosComponent from "@/app/components/profile/AudiosComponent";
-import PostComponent from "@/app/components/profile/PostsComponent";
 import ProfileComponent from "@/app/components/profile/ProfileComponent";
 import { useAuth } from "@/app/context/AuthContext";
 import axios from "axios";
@@ -56,18 +55,11 @@ const ProfileView = () => {
         >
           Audios
         </button>
-        <button
-          className="text-white bg-indigo-600 font-medium rounded-md px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base cursor-pointer"
-          onClick={() => setShowOption(2)}
-        >
-          Posts
-        </button>
       </div>
       {userData && showOption === 0 && (
         <ProfileComponent userData={userData} canEdit={canEdit} />
       )}
       {userData && showOption === 1 && <AudiosComponent userData={userData} />}
-      {userData && showOption === 2 && <PostComponent userData={userData} />}
     </section>
   );
 };
