@@ -1,6 +1,60 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const RegisterView = () => {
+  const router = useRouter();
+  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [formError, setFormError] = useState("");
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setEmailError("");
+    setFormError("");
+
+    if (!displayName || !email || !password || !confirmPassword) {
+      setFormError("Please fill in all fields");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setFormError("Passwords do not match");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:3001/users/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName, email, password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        if (data?.error?.toLowerCase().includes("email")) {
+          setEmailError(data.error);
+        } else {
+          setFormError(data.error || "Registration failed");
+        }
+        return;
+      }
+
+      toast.success("Account created! Please log in.");
+      router.push("/login");
+    } catch (err) {
+      setFormError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <section className="min-h-screen bg-gray-100">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -41,7 +95,7 @@ const RegisterView = () => {
             </h2>
 
             {/* Form */}
-            <form className="flex flex-col space-y-4 sm:space-y-6">
+            <form className="flex flex-col space-y-4 sm:space-y-6" onSubmit={onSubmit}>
               <div className="space-y-2">
                 <label
                   htmlFor="displayedName"
@@ -53,6 +107,8 @@ const RegisterView = () => {
                   type="text"
                   id="displayedName"
                   placeholder="JohnDoe"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
                   className="w-full border-2 border-indigo-700 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg rounded-xl shadow-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
@@ -65,14 +121,18 @@ const RegisterView = () => {
                   >
                     Email
                   </label>
-                  <div className="text-xs sm:text-sm bg-red-500 text-white px-2 py-1 rounded-lg">
-                    Email is already registered
-                  </div>
+                  {emailError && (
+                    <div className="text-xs sm:text-sm bg-red-500 text-white px-2 py-1 rounded-lg">
+                      {emailError}
+                    </div>
+                  )}
                 </div>
                 <input
                   placeholder="hallo@email.com"
                   type="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full border-2 border-indigo-700 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg rounded-xl shadow-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
@@ -88,6 +148,8 @@ const RegisterView = () => {
                   placeholder="******"
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full border-2 border-indigo-700 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg rounded-xl shadow-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
@@ -103,11 +165,23 @@ const RegisterView = () => {
                   placeholder="******"
                   type="password"
                   id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full border-2 border-indigo-700 px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg rounded-xl shadow-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
-              <button className="mt-6 sm:mt-8 bg-indigo-600 hover:bg-indigo-800 duration-150 text-white rounded-2xl px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium w-full">
+              {formError && (
+                <div className="text-sm bg-red-500 text-white px-3 py-2 rounded-lg">
+                  {formError}
+                </div>
+              )}
+
+              <button
+                disabled={loading}
+                type="submit"
+                className="mt-4 sm:mt-6 bg-indigo-600 hover:bg-indigo-800 disabled:opacity-60 duration-150 text-white rounded-2xl px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium w-full"
+              >
                 Let's Start <span className="font-bold">→</span>
               </button>
             </form>

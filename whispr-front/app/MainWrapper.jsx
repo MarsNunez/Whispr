@@ -12,16 +12,14 @@ const MainWrapper = ({ children }) => {
   const hideNavbarRoutes = ["/register", "/login"];
 
   const shouldHideNavbar = hideNavbarRoutes.includes(pathname);
+  const mainContainer = shouldHideNavbar ? "" : "max-w-7xl mx-auto";
+  const mainPadding = shouldHideNavbar ? "" : "px-4 sm:px-6 lg:px-8";
 
   return (
     <AuthProvider>
       <div className="min-h-screen flex flex-col">
         {!shouldHideNavbar && <Navbar />}
-        <main
-          className={`${
-            !shouldHideNavbar && "max-w-7xl"
-          } mx-auto flex-1 w-full px-4 sm:px-6 lg:px-8`}
-        >
+        <main className={`${mainContainer} flex-1 w-full ${mainPadding}`}>
           {children}
           {!shouldHideNavbar && <Footer />}
         </main>

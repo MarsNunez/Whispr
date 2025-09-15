@@ -40,7 +40,7 @@ const LoginView = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gray-100">
+    <section className="min-h-screen bg-gray-100 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         {/* Image Section - Hidden on mobile, visible on large screens */}
         <div className="relative hidden lg:block">

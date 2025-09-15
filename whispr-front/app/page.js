@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAuth } from "./context/AuthContext";
 
 export default function Home() {
@@ -41,7 +42,7 @@ export default function Home() {
                 <i className="fa-solid fa-microphone-lines text-amber-600"></i>
                 <p className="font-bold">500+</p>
               </div>
-              <p className="text-base sm:text-lg text-gray-600 tracking-wide dark:text-blue-100">
+              <p className="text-base sm:text-lg text-gray-600 tracking-wide">
                 Episodes Produced
               </p>
             </div>
@@ -59,7 +60,7 @@ export default function Home() {
                 <i className="fa-solid fa-user-group text-cyan-700"></i>
                 <p className="font-bold">1M+</p>
               </div>
-              <p className="text-base sm:text-lg text-gray-600 tracking-wide dark:text-blue-100">
+              <p className="text-base sm:text-lg text-gray-600 tracking-wide">
                 Listeners Reached
               </p>
             </div>
@@ -97,9 +98,12 @@ export default function Home() {
           </h2>
           <div className="lg:col-span-3 lg:justify-self-end text-center lg:text-right">
             <p className="text-indigo-700 my-3">Want to see what's new?</p>
-            <button className="bg-indigo-600 hover:bg-indigo-800 duration-150 text-white rounded-2xl px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium">
+            <Link
+              href="/home"
+              className="bg-indigo-600 hover:bg-indigo-800 duration-150 text-white rounded-2xl px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium"
+            >
               Discover More <span className="font-bold">→</span>
-            </button>
+            </Link>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8 sm:mt-12 gap-4 sm:gap-6 lg:gap-7">
