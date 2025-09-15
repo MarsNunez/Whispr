@@ -22,7 +22,7 @@ const upload = multer({
 });
 
 // GET - Get an audio by its ID
-route.get("/:id", async (req, res) => {
+route.get("/audio/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -306,42 +306,7 @@ route.patch("/:id", upload.single("audio"), async (req, res) => {
   }
 });
 
-// GET - Obtener todos los audios por userName
-// route.get("/audiosByUserName/:userName", async (req, res) => {
-//   try {
-//     const { userName } = req.params;
-
-//     // Validar que se proporcionó un userName
-//     if (!userName) {
-//       return res.status(400).json({ error: "El userName es requerido" });
-//     }
-
-//     // Buscar todos los audios que coincidan con el userName
-//     const audios = await AudioModel.find({ userName });
-//     const userData = await UserModel.findOne({ userName });
-
-//     // Verificar si se encontraron audios
-//     if (!audios || audios.length === 0) {
-//       return res.status(200).json({ message: "0 audios." });
-//     }
-
-//     res.status(200).json({
-//       user: {
-//         id: userData._id,
-//         userName: userData.userName,
-//         displayName: userData.displayName,
-//         email: userData.email,
-//         profilePicture: userData.profilePicture,
-//       },
-//       audios,
-//     });
-//   } catch (error) {
-//     console.error("Error al obtener audios por userName:", error);
-//     res
-//       .status(500)
-//       .json({ error: "Error interno del servidor", details: error.message });
-//   }
-// });
+// POST - Obtener todos los audios por userId
 route.post("/audiosByUserId", async (req, res) => {
   try {
     const { id } = req.body;
@@ -375,6 +340,20 @@ route.post("/audiosByUserId", async (req, res) => {
     res
       .status(500)
       .json({ error: "Error interno del servidor", details: error.message });
+  }
+});
+
+// GET - Latest audios (most recent first)
+route.get("/latest", async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 8, 50);
+    const audios = await AudioModel.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit);
+    res.status(200).json({ count: audios.length, data: audios });
+  } catch (error) {
+    console.error("Error fetching latest audios:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 

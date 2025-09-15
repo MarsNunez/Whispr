@@ -138,8 +138,8 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
           </p>
           {userData.interestTags && (
             <div className="flex jost flex-wrap mt-2 gap-2 sm:gap-3">
-              {userData.interestTags.map((tag) => (
-                <div key={tag} className="border text-sm sm:text-base px-3 sm:px-4 py-1 rounded-lg">
+              {userData.interestTags.map((tag, i) => (
+                <div key={`${tag}-${i}`} className="border text-sm sm:text-base px-3 sm:px-4 py-1 rounded-lg">
                   {tag}
                 </div>
               ))}

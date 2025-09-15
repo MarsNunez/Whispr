@@ -23,7 +23,7 @@ app.use("/posts", postRouter);
 app.post("/auth/login", loginRoute);
 
 app.get("/", (req, res) => {
-  res.send("Hello New World");
+  res.send("Hello New Worldd");
 });
 
 const startServer = async () => {

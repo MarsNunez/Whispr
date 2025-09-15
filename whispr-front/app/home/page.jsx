@@ -1,7 +1,43 @@
+"use client";
 import AudioCard from "../components/AudioCard";
 import UserCard from "../components/UserCard";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 const Home = () => {
+  const [latest, setLatest] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return latest;
+    return latest.filter((a) => {
+      const title = (a.title || "").toLowerCase();
+      const tags = (a.tags || []).join(" ").toLowerCase();
+      const desc = (a.description || "").toLowerCase();
+      return title.includes(q) || tags.includes(q) || desc.includes(q);
+    });
+  }, [query, latest]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:3001/audios/latest?limit=8"
+        );
+        setLatest(Array.isArray(data?.data) ? data.data : []);
+      } catch (e) {
+        setError("Unable to load audios");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
   return (
     <section className="pt-4 sm:pt-5 pb-8 sm:pb-10 px-4 sm:px-6 lg:px-8">
       {/* Search Bar */}
@@ -9,8 +45,10 @@ const Home = () => {
         <i className="fa-solid fa-magnifying-glass text-lg sm:text-xl text-gray-500"></i>
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="w-full h-full outline-none placeholder-gray-500 text-sm sm:text-base"
-          placeholder="What do you want to play?"
+          placeholder="Search audios by title or tags"
         />
       </div>
 
@@ -21,14 +59,27 @@ const Home = () => {
             What's new?
           </h2>
           <div className="flex gap-x-2 sm:gap-x-3 overflow-x-auto pb-2 scrollbar-hide">
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
+            {loading ? (
+              Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-32 sm:w-36 lg:w-40 m-2 sm:m-3 animate-pulse"
+                >
+                  <div className="min-h-32 sm:min-h-36 lg:min-h-40 rounded-xl bg-gray-200" />
+                  <div className="h-3 bg-gray-200 rounded w-3/4 mt-2" />
+                </div>
+              ))
+            ) : error ? (
+              <div className="text-sm text-red-600 ml-2">{error}</div>
+            ) : filtered.length === 0 ? (
+              <div className="text-sm text-gray-600 ml-2">No results found</div>
+            ) : (
+              filtered.map((a) => (
+                <Link key={a._id} href={`/audios/${a._id}`}>
+                  <AudioCard audio={a} />
+                </Link>
+              ))
+            )}
           </div>
         </div>
 
@@ -38,10 +89,24 @@ const Home = () => {
             Most liked songs
           </h2>
           <div className="flex gap-x-2 sm:gap-x-3 overflow-x-auto pb-2 scrollbar-hide">
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
-            <AudioCard />
+            {(loading && !error
+              ? Array.from({ length: 4 })
+              : filtered.slice(0, 4)
+            ).map((item, i) =>
+              loading ? (
+                <div
+                  key={i}
+                  className="w-32 sm:w-36 lg:w-40 m-2 sm:m-3 animate-pulse"
+                >
+                  <div className="min-h-32 sm:min-h-36 lg:min-h-40 rounded-xl bg-gray-200" />
+                  <div className="h-3 bg-gray-200 rounded w-3/4 mt-2" />
+                </div>
+              ) : (
+                <Link key={item._id} href={`/audios/${item._id}`}>
+                  <AudioCard audio={item} />
+                </Link>
+              )
+            )}
           </div>
         </div>
 

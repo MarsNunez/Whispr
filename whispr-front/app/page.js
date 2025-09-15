@@ -97,7 +97,7 @@ export default function Home() {
             and Listeners
           </h2>
           <div className="lg:col-span-3 lg:justify-self-end text-center lg:text-right">
-            <p className="text-indigo-700 my-3">Want to see what's new?</p>
+            <p className="text-indigo-700 my-3 mb-5">Want to see what's new?</p>
             <Link
               href="/home"
               className="bg-indigo-600 hover:bg-indigo-800 duration-150 text-white rounded-2xl px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium"

@@ -9,7 +9,7 @@ export default function AudioPlayer({ audioId, className = "" }) {
 
   const endpoint = useMemo(() => {
     if (!audioId) return null;
-    return `http://localhost:3001/audios/${audioId}`;
+    return `http://localhost:3001/audios/audio/${audioId}`;
   }, [audioId]);
 
   useEffect(() => {
