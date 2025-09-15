@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 const ProfileView = () => {
   const params = useParams();
+  const { user, isAuthenticated } = useAuth();
   const [userData, setUserData] = useState({});
   const [showOption, setShowOption] = useState(0);
 
@@ -27,6 +28,18 @@ const ProfileView = () => {
     };
     getData();
   }, [params.userName]);
+
+  const normalizeUserName = (val) => {
+    if (!val) return "";
+    let s = String(val).toLowerCase();
+    if (!s.startsWith("@")) s = `@${s}`;
+    return s;
+  };
+
+  const canEdit =
+    isAuthenticated &&
+    normalizeUserName(user?.userName) ===
+      normalizeUserName("@" + params.userName.slice(3));
 
   return (
     <section className="pb-16 sm:pb-20 mt-8 sm:mt-10 px-4 sm:px-6 lg:px-8">
@@ -50,7 +63,9 @@ const ProfileView = () => {
           Posts
         </button>
       </div>
-      {userData && showOption === 0 && <ProfileComponent userData={userData} />}
+      {userData && showOption === 0 && (
+        <ProfileComponent userData={userData} canEdit={canEdit} />
+      )}
       {userData && showOption === 1 && <AudiosComponent userData={userData} />}
       {userData && showOption === 2 && <PostComponent userData={userData} />}
     </section>

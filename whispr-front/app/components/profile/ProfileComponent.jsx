@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 
-const ProfileComponent = ({ userData }) => {
+const ProfileComponent = ({ userData, canEdit = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProfilePicture, setNewProfilePicture] = useState(null);
   const [displayName, setDisplayName] = useState("");
@@ -29,6 +29,7 @@ const ProfileComponent = ({ userData }) => {
   }, [userData]);
 
   const handleImageClick = () => {
+    if (!canEdit) return; // Solo el dueño puede editar
     if (userData) {
       setIsModalOpen(true);
       setError("");
@@ -57,6 +58,7 @@ const ProfileComponent = ({ userData }) => {
   };
 
   const handleSaveChanges = async () => {
+    if (!canEdit) return; // Guard adicional
     if (!userData || !userData.id) {
       console.error("userData o userData.id no está definido:", userData);
       setError("Error: Datos de usuario no disponibles.");
@@ -150,13 +152,16 @@ const ProfileComponent = ({ userData }) => {
             onClick={handleImageClick}
             src={userData.profilePicture}
             alt="profile picture"
-            className="w-full h-full rounded-3xl shadowing object-cover cursor-pointer justify-self-end"
+            className={`w-full h-full rounded-3xl shadowing object-cover justify-self-end ${
+              canEdit ? "cursor-pointer" : "cursor-not-allowed opacity-95"
+            }`}
+            title={canEdit ? "Edit profile" : "Only the owner can edit"}
           />
         </div>
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
+      {isModalOpen && canEdit && (
         <div className="fixed inset-0 bg-slate-400/50 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
             <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
