@@ -19,6 +19,7 @@ const ProfileView = () => {
         const response = await axios.get(
           `http://localhost:3001/users/${params.userName}`
         );
+
         setUserData(response.data);
         console.log(response.data);
       } catch (error) {
