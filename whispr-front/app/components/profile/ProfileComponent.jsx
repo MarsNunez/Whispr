@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import Link from "next/link";
+import AudioCard from "../../components/AudioCard";
 
 const ProfileComponent = ({ userData, canEdit = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +17,9 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
   const [error, setError] = useState("");
   const router = useRouter();
   const { login } = useAuth(); // Usa el contexto de autenticación
+  const [latestAudios, setLatestAudios] = useState([]);
+  const [latestLoading, setLatestLoading] = useState(false);
+  const [latestError, setLatestError] = useState("");
 
   // Efecto para inicializar los estados con userData al montar el componente
   useEffect(() => {
@@ -27,6 +32,28 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
       setUserName(userData.userName || "");
     }
   }, [userData]);
+
+  // Load latest audios for this user (max 6)
+  useEffect(() => {
+    const loadLatest = async () => {
+      if (!userData?.id) return;
+      setLatestLoading(true);
+      setLatestError("");
+      try {
+        const { data } = await axios.get(
+          `http://localhost:3001/users/audios/all/${userData.id}`
+        );
+        const arr = Array.isArray(data?.data) ? data.data : [];
+        arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setLatestAudios(arr.slice(0, 6));
+      } catch (e) {
+        setLatestError("Unable to load latest audios");
+      } finally {
+        setLatestLoading(false);
+      }
+    };
+    loadLatest();
+  }, [userData?.id]);
 
   const handleImageClick = () => {
     if (!canEdit) return; // Solo el dueño puede editar
@@ -250,68 +277,28 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
         <h3 className="text-gray-600/80 text-xl sm:text-2xl tracking-wider font-semibold mb-5 sm:mb-7">
           Latest Audios
         </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-          <div className="w-full">
-            <img
-              src={userData.profilePicture}
-              alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
-            />
-            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
-              {"Episode 07: Goodbye boring, hello adventure "}
-            </h5>
+        {latestLoading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="w-full m-1 animate-pulse">
+                <div className="w-full min-h-40 rounded-2xl bg-gray-200 mb-2" />
+                <div className="h-3 bg-gray-200 rounded w-3/4" />
+              </div>
+            ))}
           </div>
-          <div className="w-full">
-            <img
-              src={userData.profilePicture}
-              alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
-            />
-            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
-              {"Episode 07: Goodbye boring, hello adventure "}
-            </h5>
+        ) : latestError ? (
+          <div className="text-sm text-red-600">{latestError}</div>
+        ) : latestAudios.length === 0 ? (
+          <div className="text-sm text-gray-600">No audios yet</div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+            {latestAudios.map((a) => (
+              <Link key={a._id} href={`/audios/${a._id}`}>
+                <AudioCard audio={a} />
+              </Link>
+            ))}
           </div>
-          <div className="w-full">
-            <img
-              src={userData.profilePicture}
-              alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
-            />
-            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
-              {"Episode 07: Goodbye boring, hello adventure "}
-            </h5>
-          </div>
-          <div className="w-full">
-            <img
-              src={userData.profilePicture}
-              alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
-            />
-            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
-              {"Episode 07: Goodbye boring, hello adventure "}
-            </h5>
-          </div>
-          <div className="w-full">
-            <img
-              src={userData.profilePicture}
-              alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
-            />
-            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
-              {"Episode 07: Goodbye boring, hello adventure "}
-            </h5>
-          </div>
-          <div className="w-full">
-            <img
-              src={userData.profilePicture}
-              alt="latestAuth"
-              className="w-full object-cover min-h-40 rounded-2xl shadowing mb-2 sm:mb-3 aspect-square"
-            />
-            <h5 className="text-gray-600/80 font-medium text-sm sm:text-base">
-              {"Episode 07: Goodbye boring, hello adventure "}
-            </h5>
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

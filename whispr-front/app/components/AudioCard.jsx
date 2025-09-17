@@ -1,10 +1,11 @@
 const AudioCard = ({ audio, className = "" }) => {
   const title = audio?.title || "Untitled audio";
   const tags = Array.isArray(audio?.tags) ? audio.tags.slice(0, 4) : [];
-  // Fallback visual: we don't have thumbnails; use existing images
-  const img = "/img/sf.jpg";
+  const img = "https://cdn-icons-png.flaticon.com/512/12165/12165108.png";
   return (
-    <div className={`border border-transparent w-fit rounded-xl hover:bg-gray-300 group duration-200 flex-shrink-0 ${className}`}>
+    <div
+      className={`border border-transparent w-fit rounded-xl hover:bg-gray-300 group duration-200 flex-shrink-0 ${className}`}
+    >
       <div className="w-32 sm:w-36 lg:w-40 m-2 sm:m-3">
         <div className="mb-2 sm:mb-3 relative overflow-hidden">
           <img
@@ -21,14 +22,19 @@ const AudioCard = ({ audio, className = "" }) => {
               }}
             >
               {tags.map((t, i) => (
-                <div key={`${t}-${i}`} className="bg-[#fffc] rounded-full px-1 text-[10px]">
+                <div
+                  key={`${t}-${i}`}
+                  className="bg-[#fffc] rounded-full px-1 text-[10px]"
+                >
                   {t}
                 </div>
               ))}
             </div>
           )}
         </div>
-        <h5 className="text-gray-600/80 line-clamp-2 text-sm sm:text-base">{title}</h5>
+        <h5 className="text-gray-600/80 line-clamp-2 text-sm sm:text-base">
+          {title}
+        </h5>
       </div>
     </div>
   );

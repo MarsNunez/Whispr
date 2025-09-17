@@ -10,6 +10,9 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [creators, setCreators] = useState([]);
+  const [loadingCreators, setLoadingCreators] = useState(true);
+  const [creatorsError, setCreatorsError] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -36,6 +39,25 @@ const Home = () => {
       }
     };
     load();
+  }, []);
+
+  useEffect(() => {
+    const loadCreators = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3001/users");
+        const arr = Array.isArray(data) ? data : [];
+        const sorted = arr
+          .filter((u) => u && u.userName)
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 10);
+        setCreators(sorted);
+      } catch (e) {
+        setCreatorsError("Unable to load creators");
+      } finally {
+        setLoadingCreators(false);
+      }
+    };
+    loadCreators();
   }, []);
 
   return (
@@ -83,10 +105,10 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Most Liked Songs Section */}
+        {/* Most Liked Audios Section */}
         <div className="mb-4 sm:mb-6">
           <h2 className="jost text-xl sm:text-2xl font-medium ml-2 sm:ml-3 mb-3 sm:mb-4">
-            Most liked songs
+            Most liked audios
           </h2>
           <div className="flex gap-x-2 sm:gap-x-3 overflow-x-auto pb-2 scrollbar-hide">
             {(loading && !error
@@ -116,10 +138,26 @@ const Home = () => {
             Popular artists
           </h2>
           <div className="flex gap-x-2 sm:gap-x-3 overflow-x-auto pb-2 scrollbar-hide">
-            <UserCard />
-            <UserCard />
-            <UserCard />
-            <UserCard />
+            {loadingCreators ? (
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="border w-fit rounded-xl m-2 sm:m-3 p-3 animate-pulse">
+                  <div className="w-32 sm:w-36 lg:w-40">
+                    <div className="min-h-32 sm:min-h-36 lg:min-h-40 rounded-full bg-gray-200 mb-3" />
+                    <div className="h-3 bg-gray-200 rounded w-3/4" />
+                  </div>
+                </div>
+              ))
+            ) : creatorsError ? (
+              <div className="text-sm text-red-600 ml-2">{creatorsError}</div>
+            ) : creators.length === 0 ? (
+              <div className="text-sm text-gray-600 ml-2">No creators found</div>
+            ) : (
+              creators.map((u) => (
+                <Link key={u._id || u.userName} href={`/profile/${u.userName}`}>
+                  <UserCard user={u} />
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </div>

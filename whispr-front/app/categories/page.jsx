@@ -3,15 +3,23 @@
 import { useMemo, useState } from "react";
 
 const categories = [
-  { name: "ASMR", image: "/img/lullaby.webp", tags: ["tingles", "relax"] },
-  { name: "Lo-Fi", image: "/img/sf.jpg", tags: ["study", "chill"] },
-  { name: "Meditation", image: "/img/trust-creators.webp", tags: ["mindful", "breathe"] },
-  { name: "Storytelling", image: "/img/calltoactionimg.webp", tags: ["narrative", "fiction"] },
-  { name: "Podcasts", image: "/img/blame.webp", tags: ["talk", "news"] },
-  { name: "Soundscapes", image: "/img/sf.jpg", tags: ["nature", "ambient"] },
-  { name: "Sleep", image: "/img/lullaby.webp", tags: ["calm", "night"] },
-  { name: "Ambient", image: "/img/trust-creators.webp", tags: ["focus", "soft"] },
-  { name: "White Noise", image: "/img/calltoactionimg.webp", tags: ["focus", "sleep"] },
+  { name: "ASMR", image: "/img/01.jpeg", tags: ["tingles", "relax"] },
+  { name: "Lo-Fi", image: "/img/02.avif", tags: ["study", "chill"] },
+  { name: "Meditation", image: "/img/03.jpg", tags: ["mindful", "breathe"] },
+  {
+    name: "Storytelling",
+    image: "/img/04.jpg",
+    tags: ["narrative", "fiction"],
+  },
+  { name: "Podcasts", image: "/img/05.jpg", tags: ["talk", "news"] },
+  { name: "Soundscapes", image: "/img/06.jpg", tags: ["nature", "ambient"] },
+  { name: "Sleep", image: "/img/07.jpg", tags: ["calm", "night"] },
+  { name: "Ambient", image: "/img/08.jpg", tags: ["focus", "soft"] },
+  {
+    name: "White Noise",
+    image: "/img/calltoactionimg.webp",
+    tags: ["focus", "sleep"],
+  },
 ];
 
 const CategoryCard = ({ name, image, tags }) => (
@@ -37,7 +45,9 @@ const CategoryCard = ({ name, image, tags }) => (
       </div>
     </div>
     <div className="p-3">
-      <h3 className="jost text-sm sm:text-base font-medium text-gray-800">{name}</h3>
+      <h3 className="jost text-sm sm:text-base font-medium text-gray-800">
+        {name}
+      </h3>
       <p className="text-xs text-gray-500 mt-1">Live and recorded audios</p>
     </div>
   </div>
@@ -50,7 +60,8 @@ const AudiosCategoriesPage = () => {
     const q = query.trim().toLowerCase();
     if (!q) return categories;
     return categories.filter(
-      (c) => c.name.toLowerCase().includes(q) || c.tags.some((t) => t.includes(q))
+      (c) =>
+        c.name.toLowerCase().includes(q) || c.tags.some((t) => t.includes(q))
     );
   }, [query]);
 
@@ -59,8 +70,12 @@ const AudiosCategoriesPage = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold jost">Explore Audios</h1>
-            <p className="text-gray-600 text-sm sm:text-base">Discover categories like ASMR, Lo‑Fi, and more</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold jost">
+              Explore Audios
+            </h1>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Discover categories like ASMR, Lo‑Fi, and more
+            </p>
           </div>
           <div className="border max-w-full sm:max-w-sm flex items-center gap-2 rounded-full px-3 py-2">
             <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
@@ -84,4 +99,3 @@ const AudiosCategoriesPage = () => {
 };
 
 export default AudiosCategoriesPage;
-

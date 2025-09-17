@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function AudioPlayer({ audioId, className = "" }) {
   const [loading, setLoading] = useState(true);
@@ -148,11 +149,61 @@ export default function AudioPlayer({ audioId, className = "" }) {
 
       {/* Action Buttons */}
       <div className="mt-8 flex flex-wrap justify-center gap-4">
-        <button className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+        <button
+          onClick={async () => {
+            try {
+              const url = audio.audioUrl;
+              const name = (audio.title || "audio").replace(/[^a-z0-9-_]+/gi, "_");
+              // Try Cloudinary attachment param to force download
+              const withAttachment = (() => {
+                const marker = "/upload/";
+                const idx = url.indexOf(marker);
+                if (idx === -1) return url;
+                const prefix = url.slice(0, idx + marker.length);
+                const suffix = url.slice(idx + marker.length);
+                return `${prefix}fl_attachment:${encodeURIComponent(name)}.mp3/${suffix}`;
+              })();
+
+              const a = document.createElement("a");
+              a.href = withAttachment;
+              a.rel = "noopener noreferrer";
+              a.download = `${name}.mp3`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              toast.success("Descarga iniciada");
+            } catch (e) {
+              toast.error("No se pudo iniciar la descarga");
+            }
+          }}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+        >
           <i className="fas fa-download"></i>
           <span>Descargar</span>
         </button>
-        <button className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+        <button
+          onClick={async () => {
+            try {
+              const shareUrl = typeof window !== "undefined" ? window.location.href : audio.audioUrl;
+              if (navigator.share) {
+                await navigator.share({
+                  title: audio.title || "Whispr Audio",
+                  text: "Escucha este audio en Whispr",
+                  url: shareUrl,
+                });
+              } else if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(shareUrl);
+                toast.success("Enlace copiado al portapapeles");
+              } else {
+                // Fallback: prompt
+                window.prompt("Copia el enlace:", shareUrl);
+              }
+            } catch (e) {
+              toast.error("No se pudo compartir");
+            }
+          }}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+        >
           <i className="fas fa-share"></i>
           <span>Compartir</span>
         </button>
