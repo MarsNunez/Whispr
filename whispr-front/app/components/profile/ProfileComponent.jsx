@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
 import AudioCard from "../../components/AudioCard";
+import { apiUrl } from "@/app/lib/api";
 
 const ProfileComponent = ({ userData, canEdit = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +42,7 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
       setLatestError("");
       try {
         const { data } = await axios.get(
-          `http://localhost:3001/users/audios/all/${userData.id}`
+          apiUrl(`/users/audios/all/${userData.id}`)
         );
         const arr = Array.isArray(data?.data) ? data.data : [];
         arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -109,7 +110,7 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3001/users/update-profile-picture/${userData.id}`,
+        apiUrl(`/users/update-profile-picture/${userData.id}`),
         formData,
         {
           headers: {

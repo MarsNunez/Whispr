@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import AudioCard from "../../components/AudioCard";
+import { apiUrl } from "@/app/lib/api";
 
 const AudiosComponent = ({ userData }) => {
   const [audios, setAudios] = useState([]);
@@ -15,7 +16,7 @@ const AudiosComponent = ({ userData }) => {
       setError("");
       try {
         const { data } = await axios.get(
-          `http://localhost:3001/users/audios/all/${userData.id}`
+          apiUrl(`/users/audios/all/${userData.id}`)
         );
         const arr = Array.isArray(data?.data) ? data.data : [];
         arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

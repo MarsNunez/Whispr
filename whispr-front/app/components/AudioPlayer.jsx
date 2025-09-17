@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { apiUrl } from "@/app/lib/api";
 
 export default function AudioPlayer({ audioId, className = "" }) {
   const [loading, setLoading] = useState(true);
@@ -10,7 +11,7 @@ export default function AudioPlayer({ audioId, className = "" }) {
 
   const endpoint = useMemo(() => {
     if (!audioId) return null;
-    return `http://localhost:3001/audios/audio/${audioId}`;
+    return apiUrl(`/audios/audio/${audioId}`);
   }, [audioId]);
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import UserCard from "../components/UserCard";
+import { apiUrl } from "@/app/lib/api";
 
 const CreatorsView = () => {
   const [creators, setCreators] = useState([]);
@@ -14,7 +15,7 @@ const CreatorsView = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3001/users");
+        const { data } = await axios.get(apiUrl("/users"));
         setCreators(Array.isArray(data) ? data : []);
       } catch (e) {
         setError("Unable to load creators");
@@ -41,8 +42,12 @@ const CreatorsView = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold jost">Creators</h1>
-            <p className="text-gray-600 text-sm sm:text-base">Meet the voices behind the audios</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold jost">
+              Creators
+            </h1>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Meet the voices behind the audios
+            </p>
           </div>
           <div className="border max-w-full sm:max-w-sm flex items-center gap-2 rounded-full px-3 py-2">
             <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
@@ -55,14 +60,15 @@ const CreatorsView = () => {
           </div>
         </div>
 
-        {error && (
-          <div className="mt-6 text-red-600 text-sm">{error}</div>
-        )}
+        {error && <div className="mt-6 text-red-600 text-sm">{error}</div>}
 
         {loading ? (
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
             {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="rounded-2xl border border-gray-200 bg-white p-4 animate-pulse">
+              <div
+                key={i}
+                className="rounded-2xl border border-gray-200 bg-white p-4 animate-pulse"
+              >
                 <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gray-200 mx-auto mb-4" />
                 <div className="h-3 bg-gray-200 rounded w-3/4 mx-auto mb-2" />
                 <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto" />
@@ -72,7 +78,11 @@ const CreatorsView = () => {
         ) : (
           <div className="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
             {filtered.map((u) => (
-              <Link key={u._id || u.id || u.userName} href={`/profile/${u.userName}`} className="justify-self-center">
+              <Link
+                key={u._id || u.id || u.userName}
+                href={`/profile/${u.userName}`}
+                className="justify-self-center"
+              >
                 <UserCard user={u} />
               </Link>
             ))}

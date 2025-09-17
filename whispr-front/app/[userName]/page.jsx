@@ -3,6 +3,7 @@
 
 import { useAuth } from "@/app/context/AuthContext";
 import axios from "axios";
+import { apiUrl } from "@/app/lib/api";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -46,7 +47,7 @@ const UserAudioStudioView = () => {
         }
 
         const response = await axios.post(
-          "http://localhost:3001/audios/audiosByUserId", // Nueva ruta POST
+          apiUrl("/audios/audiosByUserId"), // Nueva ruta POST
           { id: user.id }, // Enviar el id en el cuerpo
           {
             headers: {
@@ -139,7 +140,7 @@ const UserAudioStudioView = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/audios/create",
+        apiUrl("/audios/create"),
         formDataToSend,
         {
           headers: {
@@ -237,7 +238,7 @@ const UserAudioStudioView = () => {
 
     try {
       const response = await axios.patch(
-        `http://localhost:3001/audios/${selectedAudio._id}`,
+        apiUrl(`/audios/${selectedAudio._id}`),
         formDataToSend,
         {
           headers: {
@@ -302,7 +303,7 @@ const UserAudioStudioView = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:3001/audios/${audioId}`,
+        apiUrl(`/audios/${audioId}`),
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

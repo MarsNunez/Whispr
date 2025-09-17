@@ -4,6 +4,7 @@ import UserCard from "../components/UserCard";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { apiUrl } from "@/app/lib/api";
 
 const Home = () => {
   const [latest, setLatest] = useState([]);
@@ -28,9 +29,7 @@ const Home = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:3001/audios/latest?limit=8"
-        );
+        const { data } = await axios.get(apiUrl("/audios/latest?limit=8"));
         setLatest(Array.isArray(data?.data) ? data.data : []);
       } catch (e) {
         setError("Unable to load audios");
@@ -44,7 +43,7 @@ const Home = () => {
   useEffect(() => {
     const loadCreators = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3001/users");
+        const { data } = await axios.get(apiUrl("/users"));
         const arr = Array.isArray(data) ? data : [];
         const sorted = arr
           .filter((u) => u && u.userName)
