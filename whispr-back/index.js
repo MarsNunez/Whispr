@@ -52,6 +52,8 @@ const corsOptions = {
     "Content-Type",
     "Authorization",
     "x-vercel-protection-bypass",
+    "vercel-automation-bypass-secret",
+    "VERCEL-AUTOMATION-BYPASS-SECRET",
   ],
 };
 
