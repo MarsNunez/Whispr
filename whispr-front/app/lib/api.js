@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://whispr-739339ng3-marsnunezs-projects.vercel.app";
+  "https://whispr-omega.vercel.app";
 
 const BYPASS_HEADER = "x-vercel-protection-bypass";
 const BYPASS_HEADER_ALT = "vercel-automation-bypass-secret";
