@@ -2,8 +2,7 @@
 "use client";
 
 import { useAuth } from "@/app/context/AuthContext";
-import axios from "axios";
-import { apiUrl } from "@/app/lib/api";
+import { apiClient, apiUrl } from "@/app/lib/api";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -46,7 +45,7 @@ const UserAudioStudioView = () => {
           return;
         }
 
-        const response = await axios.post(
+        const response = await apiClient.post(
           apiUrl("/audios/audiosByUserId"), // Nueva ruta POST
           { id: user.id }, // Enviar el id en el cuerpo
           {
@@ -139,7 +138,7 @@ const UserAudioStudioView = () => {
     formDataToSend.append("price", formData.price);
 
     try {
-      const response = await axios.post(
+      const response = await apiClient.post(
         apiUrl("/audios/create"),
         formDataToSend,
         {
@@ -237,7 +236,7 @@ const UserAudioStudioView = () => {
     formDataToSend.append("price", formData.price);
 
     try {
-      const response = await axios.patch(
+      const response = await apiClient.patch(
         apiUrl(`/audios/${selectedAudio._id}`),
         formDataToSend,
         {
@@ -302,7 +301,7 @@ const UserAudioStudioView = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.delete(
+      const response = await apiClient.delete(
         apiUrl(`/audios/${audioId}`),
         {
           headers: {

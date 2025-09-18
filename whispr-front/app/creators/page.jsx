@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import Link from "next/link";
 import UserCard from "../components/UserCard";
-import { apiUrl } from "@/app/lib/api";
+import { apiClient, apiUrl } from "@/app/lib/api";
 
 const CreatorsView = () => {
   const [creators, setCreators] = useState([]);
@@ -15,7 +14,7 @@ const CreatorsView = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await axios.get(apiUrl("/users"));
+        const { data } = await apiClient.get(apiUrl("/users"));
         setCreators(Array.isArray(data) ? data : []);
       } catch (e) {
         setError("Unable to load creators");

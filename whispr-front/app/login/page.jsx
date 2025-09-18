@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { apiUrl } from "@/app/lib/api";
+import { apiUrl, withBypassHeaders } from "@/app/lib/api";
 
 const LoginView = () => {
   const [email, setEmail] = useState("");
@@ -18,9 +18,9 @@ const LoginView = () => {
     try {
       const response = await fetch(apiUrl("/auth/login"), {
         method: "POST",
-        headers: {
+        headers: withBypassHeaders({
           "Content-Type": "application/json",
-        },
+        }),
         body: JSON.stringify({ email, password }),
       });
 

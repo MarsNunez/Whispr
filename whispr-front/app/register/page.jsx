@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { apiUrl } from "@/app/lib/api";
+import { apiUrl, withBypassHeaders } from "@/app/lib/api";
 
 const RegisterView = () => {
   const router = useRouter();
@@ -34,7 +34,7 @@ const RegisterView = () => {
       setLoading(true);
       const res = await fetch(apiUrl("/users/create"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: withBypassHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({ displayName, email, password }),
       });
 

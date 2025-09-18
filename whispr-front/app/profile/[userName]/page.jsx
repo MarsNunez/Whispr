@@ -3,10 +3,9 @@
 import AudiosComponent from "@/app/components/profile/AudiosComponent";
 import ProfileComponent from "@/app/components/profile/ProfileComponent";
 import { useAuth } from "@/app/context/AuthContext";
-import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { apiUrl } from "@/app/lib/api";
+import { apiClient, apiUrl } from "@/app/lib/api";
 
 const ProfileView = () => {
   const params = useParams();
@@ -17,7 +16,9 @@ const ProfileView = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(apiUrl(`/users/${params.userName}`));
+        const response = await apiClient.get(
+          apiUrl(`/users/${params.userName}`)
+        );
 
         setUserData(response.data);
         console.log(response.data);

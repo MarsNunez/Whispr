@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Link from "next/link";
 import AudioCard from "../../components/AudioCard";
-import { apiUrl } from "@/app/lib/api";
+import { apiClient, apiUrl } from "@/app/lib/api";
 
 const AudiosComponent = ({ userData }) => {
   const [audios, setAudios] = useState([]);
@@ -15,7 +14,7 @@ const AudiosComponent = ({ userData }) => {
       setLoading(true);
       setError("");
       try {
-        const { data } = await axios.get(
+        const { data } = await apiClient.get(
           apiUrl(`/users/audios/all/${userData.id}`)
         );
         const arr = Array.isArray(data?.data) ? data.data : [];

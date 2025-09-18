@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
 import AudioCard from "../../components/AudioCard";
-import { apiUrl } from "@/app/lib/api";
+import { apiClient, apiUrl } from "@/app/lib/api";
 
 const ProfileComponent = ({ userData, canEdit = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +40,7 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
       setLatestLoading(true);
       setLatestError("");
       try {
-        const { data } = await axios.get(
+        const { data } = await apiClient.get(
           apiUrl(`/users/audios/all/${userData.id}`)
         );
         const arr = Array.isArray(data?.data) ? data.data : [];
@@ -109,7 +108,7 @@ const ProfileComponent = ({ userData, canEdit = false }) => {
     console.log("Enviando datos:", { userId: userData.id, formData });
 
     try {
-      const response = await axios.put(
+      const response = await apiClient.put(
         apiUrl(`/users/update-profile-picture/${userData.id}`),
         formData,
         {
