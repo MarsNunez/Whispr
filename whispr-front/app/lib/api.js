@@ -7,20 +7,13 @@ export const API_BASE =
 const BYPASS_HEADER = "x-vercel-protection-bypass";
 const BYPASS_HEADER_ALT = "vercel-automation-bypass-secret";
 const BYPASS_HEADER_ALT_UPPER = "VERCEL-AUTOMATION-BYPASS-SECRET";
-const BYPASS_QUERY_KEY = "vercel-automation-bypass-secret";
 
 const bypassSecret = process.env.NEXT_PUBLIC_VERCEL_AUTOMATION_BYPASS_SECRET;
 
 export const apiUrl = (path) => {
   const base = API_BASE;
   const p = path ? (String(path).startsWith("/") ? path : `/${path}`) : "";
-  const url = new URL(`${base}${p}`);
-
-  if (bypassSecret && !url.searchParams.has(BYPASS_QUERY_KEY)) {
-    url.searchParams.set(BYPASS_QUERY_KEY, bypassSecret);
-  }
-
-  return url.toString();
+  return `${base}${p}`;
 };
 
 export const apiClient = axios.create();
@@ -35,11 +28,6 @@ if (bypassSecret) {
       [BYPASS_HEADER_ALT_UPPER]: bypassSecret,
     };
 
-    const params = { ...(nextConfig.params || {}) };
-    if (params[BYPASS_QUERY_KEY] === undefined) {
-      params[BYPASS_QUERY_KEY] = bypassSecret;
-    }
-    nextConfig.params = params;
     return nextConfig;
   });
 }
